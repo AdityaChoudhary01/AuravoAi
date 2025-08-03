@@ -5,12 +5,13 @@ import { chat, type ChatInput } from '@/ai/flows/chat';
 import { generateInitialPrompts } from '@/ai/flows/generate-initial-prompt';
 import { processAudio } from '@/ai/flows/process-audio';
 import { ChatMessage, type ChatMessageProps } from '@/components/chat-message';
+import { GeminiIcon } from '@/components/gemini-icon';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
-import { Bot, Image as ImageIcon, LoaderCircle, Mic, SendHorizontal, X } from 'lucide-react';
+import { ImageIcon, LoaderCircle, Mic, SendHorizontal, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 
@@ -173,11 +174,11 @@ export default function Home() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
-        className="border-b p-4 shadow-sm"
+        className="border-b border-white/10 p-4 shadow-sm"
       >
         <div className="mx-auto flex max-w-3xl items-center justify-center gap-2 text-center font-headline text-xl font-semibold sm:text-2xl">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
-            <Bot className="h-6 w-6 text-primary" />
+          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-transparent">
+            <GeminiIcon className="h-6 w-6" />
           </div>
           <h1 className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">Auravo AI</h1>
         </div>
@@ -194,7 +195,7 @@ export default function Home() {
                     transition={{ duration: 0.5, type: 'spring', stiffness: 260, damping: 20 }}
                     className="mb-4 rounded-full bg-primary/10 p-4"
                   >
-                    <Bot size={40} className="text-primary" />
+                    <GeminiIcon className="h-10 w-10" />
                   </motion.div>
                   <motion.h2 
                     initial={{ opacity: 0, y: 20 }}

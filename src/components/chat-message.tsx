@@ -4,9 +4,10 @@
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
-import { Bot, LoaderCircle, User } from 'lucide-react';
+import { LoaderCircle } from 'lucide-react';
 import Markdown from 'react-markdown';
 import Image from 'next/image';
+import { GeminiIcon } from './gemini-icon';
 
 export type ChatMessageProps = {
   message: {
@@ -30,9 +31,9 @@ export function ChatMessage({ message, isLoading = false }: ChatMessageProps) {
         animate="visible"
         className="flex items-start justify-start gap-3"
       >
-        <Avatar className="h-8 w-8 border bg-background">
+        <Avatar className="h-8 w-8 border-none bg-transparent">
           <AvatarFallback className="bg-transparent">
-            <Bot className="h-5 w-5 text-primary" />
+            <GeminiIcon className="h-5 w-5" />
           </AvatarFallback>
         </Avatar>
         <div className="flex items-center justify-center rounded-lg bg-secondary p-3 text-sm shadow-sm">
@@ -56,9 +57,9 @@ export function ChatMessage({ message, isLoading = false }: ChatMessageProps) {
       )}
     >
       {!isUser && (
-        <Avatar className="h-8 w-8 border bg-background">
+        <Avatar className="h-8 w-8 border-none bg-transparent">
           <AvatarFallback className="bg-transparent">
-            <Bot className="h-5 w-5 text-primary" />
+            <GeminiIcon className="h-5 w-5" />
           </AvatarFallback>
         </Avatar>
       )}
@@ -68,7 +69,7 @@ export function ChatMessage({ message, isLoading = false }: ChatMessageProps) {
           isUser
             ? 'max-w-[90%] bg-primary text-primary-foreground shadow-md sm:max-w-[80%]'
             : 'bg-transparent shadow-none',
-          isImage && 'p-0 overflow-hidden'
+          isImage ? 'p-0 overflow-hidden' : 'pt-0'
         )}
       >
         {isImage ? (
