@@ -25,6 +25,7 @@ export const metadata: Metadata = {
   creator: 'Aditya Choudhary',
   publisher: 'Auravo AI',
   metadataBase: new URL('https://auravoai.vercel.app'),
+  manifest: '/manifest.json',
   openGraph: {
     title: 'Auravo AI - Your Intelligent Chat Assistant',
     description:
