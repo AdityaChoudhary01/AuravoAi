@@ -8,9 +8,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { updateUserProfile } from './actions';
+import { uploadAvatar } from './actions';
 import { LoaderCircle } from 'lucide-react';
 import { updateProfile } from 'firebase/auth';
+import { auth } from '@/lib/firebase';
 
 export default function ProfilePage() {
   const { user, loading } = useAuth();
@@ -45,7 +46,7 @@ export default function ProfilePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) {
+    if (!auth.currentUser) {
         toast({
             title: 'Error',
             description: 'You must be logged in to update your profile.',
@@ -56,22 +57,30 @@ export default function ProfilePage() {
 
     setIsSubmitting(true);
 
-    const formData = new FormData();
-    formData.append('name', name);
-    if (avatarFile) {
-      formData.append('avatar', avatarFile);
-    }
-    
     try {
-      await updateUserProfile(formData);
-      // Since server actions can't reliably update the client's auth state,
-      // we can optimistically update the name on the client, or just reload.
-      // For simplicity and to ensure data is fresh from Firebase, we'll reload.
+      let photoURL = user.photoURL;
+      
+      if (avatarFile) {
+        const formData = new FormData();
+        formData.append('avatar', avatarFile);
+        const result = await uploadAvatar(formData);
+        if (result.photoURL) {
+            photoURL = result.photoURL;
+        }
+      }
+
+      await updateProfile(auth.currentUser, {
+          displayName: name,
+          photoURL: photoURL,
+      });
+
       toast({
         title: 'Success',
-        description: 'Your profile has been updated. Refreshing the page...',
+        description: 'Your profile has been updated. Please refresh to see changes.',
       });
+      // Optional: force a reload to get fresh user data everywhere.
       setTimeout(() => window.location.reload(), 1500);
+
     } catch (error) {
       console.error(error);
       toast({
