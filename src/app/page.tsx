@@ -286,8 +286,8 @@ export default function Home() {
             </ScrollArea>
         </Sidebar>
 
-        <main className="flex flex-1 flex-col">
-          <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center justify-between border-b border-white/10 bg-background/50 px-4 shadow-sm backdrop-blur-sm">
+        <main className="flex flex-1 flex-col overflow-hidden">
+          <header className="shrink-0 flex h-16 items-center justify-between border-b border-white/10 bg-background/50 px-4 shadow-sm backdrop-blur-sm">
             <SidebarTrigger />
             <div className="flex flex-1 items-center justify-center gap-3 text-center font-headline text-2xl font-semibold sm:text-3xl">
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-transparent">
@@ -358,7 +358,7 @@ export default function Home() {
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
-            className="sticky bottom-0 bg-background/50 p-4 backdrop-blur-sm"
+            className="shrink-0 bg-background/50 p-4 backdrop-blur-sm"
           >
             <div className="container mx-auto">
               <form
