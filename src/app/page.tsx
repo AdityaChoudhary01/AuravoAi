@@ -1,3 +1,4 @@
+
 'use client';
 
 import { chat, type ChatInput } from '@/ai/flows/chat';
@@ -269,7 +270,7 @@ export default function Home() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder={isRecording ? 'Recording...' : 'Type your message here...'}
-              className="flex-1 resize-none border-none bg-transparent py-1.5 text-base shadow-none focus-visible:ring-0"
+              className="flex-1 resize-none border-none bg-transparent py-1.5 text-base shadow-none focus-visible:ring-0 focus:outline-none"
               onKeyDown={handleKeyDown}
               disabled={isLoading || isRecording}
               maxRows={5}
