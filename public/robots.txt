@@ -1,0 +1,7 @@
+# https://www.robotstxt.org/robotstxt.html
+User-agent: *
+Allow: /
+Disallow: /profile
+Disallow: /api
+
+Sitemap: https://www.auravo.ai/sitemap.xml
