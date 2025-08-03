@@ -15,6 +15,7 @@ import { useEffect, useRef, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { summarizeConversation } from '@/ai/flows/summarize-conversation';
 import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarProvider, SidebarTrigger, SidebarInset } from '@/components/ui/sidebar';
+import { SheetClose } from '@/components/ui/sheet';
 
 type Message = ChatMessageProps['message'];
 
@@ -114,7 +115,7 @@ export default function Home() {
         try {
           const { summary } = await summarizeConversation({ conversation: conversationText });
           updateConversation(currentConversationId!, { title: summary });
-        } catch(e) {
+        } catch (e) {
             console.error("Failed to summarize conversation title: ", e);
         }
       }
@@ -236,7 +237,9 @@ export default function Home() {
       <div className="flex h-dvh bg-background">
         <Sidebar collapsible="offcanvas">
           <SidebarHeader>
-            <h2 className="text-lg font-semibold">Conversations</h2>
+            <div className="flex items-center justify-between">
+              <h2 className="text-lg font-semibold">Conversations</h2>
+            </div>
             <Button variant="outline" className="w-full" onClick={startNewChat}>
               <Plus className="mr-2" />
               New Chat
@@ -260,134 +263,132 @@ export default function Home() {
           </SidebarContent>
         </Sidebar>
 
-        <SidebarInset>
-          <div className="flex h-dvh flex-col">
-            <header className="sticky top-0 z-10 border-b border-white/10 bg-background/50 p-4 shadow-sm backdrop-blur-sm">
-              <div className="mx-auto flex max-w-5xl items-center justify-between gap-3">
-                <SidebarTrigger>
-                  <Menu />
-                </SidebarTrigger>
-                <div className="flex items-center justify-center gap-3 text-center font-headline text-2xl font-semibold sm:text-3xl">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-transparent">
-                    <GeminiIcon className="h-10 w-10" />
-                  </div>
-                  <h1 className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                    Auravo AI
-                  </h1>
+        <div className="flex h-dvh flex-1 flex-col">
+           <header className="sticky top-0 z-10 border-b border-white/10 bg-background/50 p-4 shadow-sm backdrop-blur-sm">
+            <div className="mx-auto flex w-full items-center justify-between gap-3">
+              <SidebarTrigger>
+                <Menu />
+              </SidebarTrigger>
+              <div className="flex flex-1 items-center justify-center gap-3 text-center font-headline text-2xl font-semibold sm:text-3xl">
+                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-transparent">
+                  <GeminiIcon className="h-10 w-10" />
                 </div>
-                <div className="w-8"></div>
+                <h1 className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                  Auravo AI
+                </h1>
               </div>
-            </header>
+              <div className="w-8"></div>
+            </div>
+          </header>
 
-            <main className="flex-1 overflow-y-auto">
-              <div className="mx-auto w-full max-w-5xl flex-1 space-y-6 p-4 md:p-6">
-                {currentMessages.length === 0 && !isLoading ? (
-                  <div className="flex h-full flex-col items-center justify-center text-center">
-                    <motion.div
-                      initial={{ scale: 0, rotate: -45 }}
-                      animate={{ scale: 1, rotate: 0 }}
-                      transition={{ duration: 0.5, type: 'spring', stiffness: 260, damping: 20 }}
-                      className="mb-4 rounded-full bg-primary/10 p-4"
-                    >
-                      <GeminiIcon className="h-10 w-10" />
-                    </motion.div>
-                    <motion.h2
-                      initial={{ opacity: 0, y: 20 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.5, delay: 0.2 }}
-                      className="text-2xl font-semibold text-foreground">
-                      How can I help you today?
-                    </motion.h2>
-                    <div className="mt-8 grid w-full max-w-4xl grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-                      {initialPrompts.map((prompt, i) => (
-                        <motion.div
-                          key={i}
-                          custom={i}
-                          variants={promptVariants}
-                          initial="hidden"
-                          animate="visible"
+          <main className="flex-1 overflow-y-auto">
+            <div className="mx-auto w-full max-w-5xl flex-1 space-y-6 p-4 md:p-6">
+              {currentMessages.length === 0 && !isLoading ? (
+                <div className="flex h-full flex-col items-center justify-center text-center">
+                  <motion.div
+                    initial={{ scale: 0, rotate: -45 }}
+                    animate={{ scale: 1, rotate: 0 }}
+                    transition={{ duration: 0.5, type: 'spring', stiffness: 260, damping: 20 }}
+                    className="mb-4 rounded-full bg-primary/10 p-4"
+                  >
+                    <GeminiIcon className="h-10 w-10" />
+                  </motion.div>
+                  <motion.h2
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                    className="text-2xl font-semibold text-foreground">
+                    How can I help you today?
+                  </motion.h2>
+                  <div className="mt-8 grid w-full max-w-4xl grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+                    {initialPrompts.map((prompt, i) => (
+                      <motion.div
+                        key={i}
+                        custom={i}
+                        variants={promptVariants}
+                        initial="hidden"
+                        animate="visible"
+                      >
+                        <Button
+                          variant="outline"
+                          className="h-auto min-h-14 w-full whitespace-normal rounded-lg border-dashed text-left text-sm transition-transform hover:scale-105"
+                          onClick={() => handleSendMessage(prompt)}
                         >
-                          <Button
-                            variant="outline"
-                            className="h-auto min-h-14 w-full whitespace-normal rounded-lg border-dashed text-left text-sm transition-transform hover:scale-105"
-                            onClick={() => handleSendMessage(prompt)}
-                          >
-                            {prompt}
-                          </Button>
-                        </motion.div>
-                      ))}
-                    </div>
+                          {prompt}
+                        </Button>
+                      </motion.div>
+                    ))}
                   </div>
-                ) : (
-                  currentMessages.map((msg, index) => (
-                    <ChatMessage key={index} message={msg} />
-                  ))
-                )}
-                {isLoading && <ChatMessage isLoading />}
-                <div ref={messagesEndRef} />
-              </div>
-            </main>
+                </div>
+              ) : (
+                currentMessages.map((msg, index) => (
+                  <ChatMessage key={index} message={msg} />
+                ))
+              )}
+              {isLoading && <ChatMessage isLoading />}
+              <div ref={messagesEndRef} />
+            </div>
+          </main>
 
-            <motion.div
-              initial={{ y: 100, opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.5, ease: 'easeOut' }}
-              className="bg-background/50 p-4 backdrop-blur-sm"
-            >
-              <div className="container mx-auto">
-                <form
-                  onSubmit={handleFormSubmit}
-                  className="relative mx-auto flex w-full max-w-3xl items-end space-x-2 rounded-2xl border bg-secondary/50 p-2 shadow-lg"
+          <motion.div
+            initial={{ y: 100, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+            className="bg-background/50 p-4 backdrop-blur-sm"
+          >
+            <div className="container mx-auto">
+              <form
+                onSubmit={handleFormSubmit}
+                className="relative mx-auto flex w-full max-w-3xl items-end space-x-2 rounded-2xl border bg-secondary/50 p-2 shadow-lg"
+              >
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="ghost"
+                  onClick={handleMicClick}
+                  className={cn("h-9 w-9 shrink-0 rounded-full text-muted-foreground transition-colors hover:text-primary", isRecording && "bg-red-500/20 text-red-500 hover:bg-red-500/30 hover:text-red-500")}
+                  aria-label={isRecording ? 'Stop recording' : 'Start recording'}
                 >
-                  <Button
-                    type="button"
-                    size="icon"
-                    variant="ghost"
-                    onClick={handleMicClick}
-                    className={cn("h-9 w-9 shrink-0 rounded-full text-muted-foreground transition-colors hover:text-primary", isRecording && "bg-red-500/20 text-red-500 hover:bg-red-500/30 hover:text-red-500")}
-                    aria-label={isRecording ? 'Stop recording' : 'Start recording'}
-                  >
-                    {isRecording ? <X className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
-                  </Button>
-                  <Button
-                    type="button"
-                    size="icon"
-                    variant="ghost"
-                    disabled={isLoading || !input.trim()}
-                    onClick={handleImageGeneration}
-                    className="h-9 w-9 shrink-0 rounded-full text-muted-foreground transition-colors hover:text-primary disabled:opacity-50"
-                    aria-label="Generate image"
-                  >
-                    <ImageIcon className="h-5 w-5" />
-                  </Button>
-                  <TextareaAutosize
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    placeholder={isRecording ? 'Recording...' : 'Type your message here...'}
-                    className="flex-1 resize-none border-none bg-transparent py-1.5 text-base shadow-none focus-visible:ring-0 focus:outline-none"
-                    onKeyDown={handleKeyDown}
-                    disabled={isLoading || isRecording}
-                    maxRows={5}
-                    rows={1}
-                  />
-                  <Button
-                    type="submit"
-                    size="icon"
-                    disabled={isLoading || !input.trim() || isRecording}
-                    aria-label="Send message"
-                    className="h-9 w-9 shrink-0 rounded-full bg-primary text-primary-foreground transition-transform hover:scale-110 active:scale-95 disabled:bg-primary/50"
-                  >
-                    {isLoading && !isRecording ? (
-                      <LoaderCircle className="h-5 w-5 animate-spin" />
-                    ) : (
-                      <SendHorizontal className="h-5 w-5" />
-                    )}
-                  </Button>
-                </form>
-              </div>
-            </motion.div>
-          </div>
-        </SidebarInset>
+                  {isRecording ? <X className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
+                </Button>
+                <Button
+                  type="button"
+                  size="icon"
+                  variant="ghost"
+                  disabled={isLoading || !input.trim()}
+                  onClick={handleImageGeneration}
+                  className="h-9 w-9 shrink-0 rounded-full text-muted-foreground transition-colors hover:text-primary disabled:opacity-50"
+                  aria-label="Generate image"
+                >
+                  <ImageIcon className="h-5 w-5" />
+                </Button>
+                <TextareaAutosize
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder={isRecording ? 'Recording...' : 'Type your message here...'}
+                  className="flex-1 resize-none border-none bg-transparent py-1.5 text-base shadow-none focus-visible:ring-0 focus:outline-none"
+                  onKeyDown={handleKeyDown}
+                  disabled={isLoading || isRecording}
+                  maxRows={5}
+                  rows={1}
+                />
+                <Button
+                  type="submit"
+                  size="icon"
+                  disabled={isLoading || !input.trim() || isRecording}
+                  aria-label="Send message"
+                  className="h-9 w-9 shrink-0 rounded-full bg-primary text-primary-foreground transition-transform hover:scale-110 active:scale-95 disabled:bg-primary/50"
+                >
+                  {isLoading && !isRecording ? (
+                    <LoaderCircle className="h-5 w-5 animate-spin" />
+                  ) : (
+                    <SendHorizontal className="h-5 w-5" />
+                  )}
+                </Button>
+              </form>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </SidebarProvider>
   );

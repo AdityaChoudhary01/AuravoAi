@@ -196,11 +196,14 @@ const Sidebar = React.forwardRef<
             }
             side={side}
           >
-            <div className="flex h-full w-full flex-col">{children}</div>
-            <SheetClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
-              <X className="h-4 w-4" />
-              <span className="sr-only">Close</span>
-            </SheetClose>
+            <div className="flex h-full w-full flex-col">
+              <div className="flex items-center justify-between p-2">
+                <SheetClose>
+                    <X className="h-5 w-5" />
+                </SheetClose>
+              </div>
+              {children}
+            </div>
           </SheetContent>
         </Sheet>
       )
@@ -209,13 +212,15 @@ const Sidebar = React.forwardRef<
     return (
       <div
         ref={ref}
-        className="group peer hidden md:block text-sidebar-foreground"
+        className={cn(
+            "group peer hidden md:block text-sidebar-foreground",
+            state === 'collapsed' && finalCollapsible === 'offcanvas' && 'hidden'
+        )}
         data-state={state}
         data-collapsible={finalCollapsible === 'offcanvas' && state === 'collapsed' ? 'offcanvas' : ''}
         data-variant={variant}
         data-side={side}
       >
-        {/* This is what handles the sidebar gap on desktop */}
         <div
           className={cn(
             "duration-200 relative h-svh bg-transparent transition-[width] ease-linear",
