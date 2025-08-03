@@ -18,6 +18,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAuth } from '@/hooks/use-auth';
 import { AuthModal } from '@/components/auth-modal';
 import { UserNav } from '@/components/user-nav';
+import { Footer } from '@/components/footer';
 
 type Message = ChatMessageProps['message'];
 
@@ -356,7 +357,7 @@ export default function Home() {
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.5, ease: 'easeOut' }}
-            className="bg-background/50 p-4 backdrop-blur-sm"
+            className="sticky bottom-0 bg-background/50 p-4 backdrop-blur-sm"
           >
             <div className="container mx-auto">
               <form
@@ -410,10 +411,9 @@ export default function Home() {
               </form>
             </div>
           </motion.div>
+          <Footer />
         </main>
       </div>
     </SidebarProvider>
   );
 }
-
-    

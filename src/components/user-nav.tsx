@@ -13,7 +13,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
-import { LogOut, User as UserIcon } from 'lucide-react';
+import { LogOut, User as UserIcon, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 
 export function UserNav() {
@@ -55,6 +55,12 @@ export function UserNav() {
             <DropdownMenuItem>
                 <UserIcon className="mr-2 h-4 w-4" />
                 <span>Profile</span>
+            </DropdownMenuItem>
+          </Link>
+          <Link href="/contact" passHref>
+            <DropdownMenuItem>
+                <MessageSquare className="mr-2 h-4 w-4" />
+                <span>Contact Us</span>
             </DropdownMenuItem>
           </Link>
         </DropdownMenuGroup>
