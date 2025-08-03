@@ -175,7 +175,7 @@ export default function Home() {
         transition={{ duration: 0.5, ease: 'easeOut' }}
         className="border-b p-4 shadow-sm"
       >
-        <div className="container mx-auto flex items-center justify-center gap-2 text-center font-headline text-xl font-semibold sm:text-2xl">
+        <div className="mx-auto flex max-w-3xl items-center justify-center gap-2 text-center font-headline text-xl font-semibold sm:text-2xl">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
             <Bot className="h-6 w-6 text-primary" />
           </div>
@@ -184,8 +184,8 @@ export default function Home() {
       </motion.header>
       <div className="flex flex-1 overflow-hidden">
         <ScrollArea className="h-full flex-1">
-          <div className="container mx-auto flex h-full flex-col justify-between p-4 md:p-6">
-            <div className="flex-1 space-y-6 pb-24">
+          <div className="flex h-full flex-col justify-between p-4 md:p-6">
+            <div className="mx-auto w-full max-w-3xl flex-1 space-y-6 pb-24">
               {messages.length === 0 && !isLoading ? (
                 <div className="flex h-full flex-col items-center justify-center text-center">
                   <motion.div

@@ -63,10 +63,10 @@ export function ChatMessage({ message, isLoading = false }: ChatMessageProps) {
       )}
       <div
         className={cn(
-          'max-w-[80%] rounded-lg p-3 text-sm shadow-md',
+          'rounded-lg p-3 text-sm shadow-md',
           isUser
             ? 'bg-primary text-primary-foreground'
-            : 'bg-secondary text-secondary-foreground',
+            : 'w-full bg-secondary text-secondary-foreground',
           isImage && 'p-0 overflow-hidden'
         )}
       >
