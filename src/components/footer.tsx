@@ -22,6 +22,9 @@ export function Footer() {
           <Link href="/contact" className="transition-colors hover:text-foreground">
             Contact
           </Link>
+          <Link href="/donate" className="transition-colors hover:text-foreground">
+            Donate
+          </Link>
         </div>
         <div className="text-sm text-muted-foreground">
           © {new Date().getFullYear()} Auravo AI. All rights reserved.

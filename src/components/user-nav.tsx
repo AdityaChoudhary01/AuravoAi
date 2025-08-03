@@ -1,4 +1,4 @@
-// src/components/user-nav.tsx
+
 'use client';
 
 import {
@@ -13,7 +13,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/hooks/use-auth';
-import { LogOut, User as UserIcon, MessageSquare } from 'lucide-react';
+import { LogOut, User as UserIcon, MessageSquare, Heart } from 'lucide-react';
 import Link from 'next/link';
 
 export function UserNav() {
@@ -61,6 +61,12 @@ export function UserNav() {
             <DropdownMenuItem>
                 <MessageSquare className="mr-2 h-4 w-4" />
                 <span>Contact Us</span>
+            </DropdownMenuItem>
+          </Link>
+           <Link href="/donate" passHref>
+            <DropdownMenuItem>
+                <Heart className="mr-2 h-4 w-4" />
+                <span>Donate</span>
             </DropdownMenuItem>
           </Link>
         </DropdownMenuGroup>
