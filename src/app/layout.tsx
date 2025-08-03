@@ -1,7 +1,6 @@
-
-import type {Metadata} from 'next';
+import type { Metadata } from 'next';
 import './globals.css';
-import { Toaster } from "@/components/ui/toaster"
+import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/components/auth-provider';
 
 export const metadata: Metadata = {
@@ -9,24 +8,36 @@ export const metadata: Metadata = {
     default: 'Auravo AI - Your Intelligent Chat Assistant',
     template: '%s | Auravo AI',
   },
-  description: 'Engage in intelligent conversations, generate images, and get instant answers with Auravo AI, a modern chat application powered by Google\'s Gemini models.',
-  keywords: ['AI Chat', 'Intelligent Assistant', 'Gemini AI', 'Next.js', 'Auravo AI', 'Chatbot', 'Image Generation', 'AI assistant', 'Conversational AI'],
+  description:
+    "Engage in intelligent conversations, generate images, and get instant answers with Auravo AI, a modern chat application powered by Google's Gemini models.",
+  keywords: [
+    'AI Chat',
+    'Intelligent Assistant',
+    'Gemini AI',
+    'Next.js',
+    'Auravo AI',
+    'Chatbot',
+    'Image Generation',
+    'AI assistant',
+    'Conversational AI',
+  ],
   authors: [{ name: 'Aditya Choudhary', url: 'https://auravoai.vercel.app' }],
   creator: 'Aditya Choudhary',
   publisher: 'Auravo AI',
   metadataBase: new URL('https://auravoai.vercel.app'),
   openGraph: {
     title: 'Auravo AI - Your Intelligent Chat Assistant',
-    description: 'Engage in intelligent conversations, generate images, and get instant answers with Auravo AI.',
+    description:
+      'Engage in intelligent conversations, generate images, and get instant answers with Auravo AI.',
     url: 'https://auravoai.vercel.app',
     siteName: 'Auravo AI',
     images: [
-        {
-            url: '/og-image.png', // Must be an absolute URL
-            width: 1200,
-            height: 630,
-            alt: 'Auravo AI in action',
-        },
+      {
+        url: 'https://auravoai.vercel.app/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Auravo AI in action',
+      },
     ],
     locale: 'en_US',
     type: 'website',
@@ -34,9 +45,10 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: 'Auravo AI - Your Intelligent Chat Assistant',
-    description: 'Engage in intelligent conversations, generate images, and get instant answers with Auravo AI.',
+    description:
+      'Engage in intelligent conversations, generate images, and get instant answers with Auravo AI.',
     creator: '@adityacodes',
-    images: ['/twitter-image.png'], // Must be an absolute URL
+    images: ['https://auravoai.vercel.app/twitter-image.png'],
   },
   robots: {
     index: true,
@@ -49,24 +61,22 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-},
   icons: {
-    icon: '/favicon.svg',
+    icon: 'https://auravoai.vercel.app/favicon.svg',
   },
 };
+
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    'name': 'Auravo AI',
-    'url': 'https://auravoai.vercel.app',
-    'potentialAction': {
+    name: 'Auravo AI',
+    url: 'https://auravoai.vercel.app',
+    potentialAction: {
       '@type': 'SearchAction',
-      'target': 'https://auravoai.vercel.app/search?q={search_term_string}',
+      target: 'https://auravoai.vercel.app/search?q={search_term_string}',
       'query-input': 'required name=search_term_string',
     },
   };
@@ -76,17 +86,15 @@ export default function RootLayout({
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
-        <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        <link
+          href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+          rel="stylesheet"
         />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       </head>
       <body className="font-body antialiased flex flex-col min-h-screen dark">
         <AuthProvider>
-          <div className="flex-1 flex flex-col">
-            {children}
-          </div>
+          <div className="flex-1 flex flex-col">{children}</div>
           <Toaster />
         </AuthProvider>
       </body>
