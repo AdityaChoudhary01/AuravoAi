@@ -171,7 +171,7 @@ const Sidebar = React.forwardRef<
     {
       side = "left",
       variant = "sidebar",
-      collapsible = "offcanvas",
+      collapsible = "icon",
       className,
       children,
       ...props
@@ -180,8 +180,6 @@ const Sidebar = React.forwardRef<
   ) => {
     const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
     
-    const finalCollapsible = isMobile ? 'offcanvas' : collapsible;
-
     if (isMobile) {
       return (
         <Sheet open={openMobile} onOpenChange={setOpenMobile} {...props}>
@@ -197,13 +195,12 @@ const Sidebar = React.forwardRef<
             side={side}
           >
             <div className="flex h-full w-full flex-col">
-              <div className="flex items-center justify-between p-2">
-                <SheetClose>
-                    <X className="h-5 w-5" />
-                </SheetClose>
-              </div>
               {children}
             </div>
+            <SheetClose className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
+              <X className="h-4 w-4" />
+              <span className="sr-only">Close</span>
+            </SheetClose>
           </SheetContent>
         </Sheet>
       )
@@ -214,28 +211,18 @@ const Sidebar = React.forwardRef<
         ref={ref}
         className={cn(
             "group peer hidden md:block text-sidebar-foreground",
-            state === 'collapsed' && finalCollapsible === 'offcanvas' && 'hidden'
+            className,
+            state === 'collapsed' && collapsible === 'offcanvas' ? 'hidden' : 'block'
         )}
         data-state={state}
-        data-collapsible={finalCollapsible === 'offcanvas' && state === 'collapsed' ? 'offcanvas' : ''}
+        data-collapsible={collapsible}
         data-variant={variant}
         data-side={side}
       >
         <div
           className={cn(
-            "duration-200 relative h-svh bg-transparent transition-[width] ease-linear",
-            state === 'collapsed' ? 'w-0' : 'w-[var(--sidebar-width)]'
-          )}
-        />
-        <div
-          className={cn(
-            "duration-200 fixed inset-y-0 z-10 hidden h-svh transition-[left,right,width] ease-linear md:flex",
-            side === "left" ? "left-0" : "right-0",
-            state === 'collapsed' 
-                ? (side === "left" ? "left-[calc(var(--sidebar-width)*-1)]" : "right-[calc(var(--sidebar-width)*-1)]")
-                : (side === "left" ? "left-0" : "right-0"),
-            "w-[var(--sidebar-width)]",
-            className
+            "duration-200 fixed inset-y-0 z-10 hidden h-svh transition-[width] ease-linear md:flex",
+            collapsible === 'icon' && state === 'collapsed' ? 'w-[var(--sidebar-width-icon)]' : 'w-[var(--sidebar-width)]'
           )}
           {...props}
         >
