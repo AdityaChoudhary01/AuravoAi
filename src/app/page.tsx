@@ -16,6 +16,9 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { summarizeConversation } from '@/ai/flows/summarize-conversation';
 import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { useAuth } from '@/hooks/use-auth';
+import { AuthModal } from '@/components/auth-modal';
+import { UserNav } from '@/components/user-nav';
 
 type Message = ChatMessageProps['message'];
 
@@ -37,6 +40,9 @@ export default function Home() {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const { toast } = useToast();
+  const { user } = useAuth();
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [sessionMessageCount, setSessionMessageCount] = useState(0);
 
   useEffect(() => {
     const savedConversations = localStorage.getItem('chatHistory');
@@ -84,6 +90,11 @@ export default function Home() {
   };
 
   const handleSendMessage = async (prompt?: string) => {
+    if (!user && sessionMessageCount >= 15) {
+      setIsAuthModalOpen(true);
+      return;
+    }
+
     const userMessageContent = prompt || input;
     if (!userMessageContent.trim()) return;
 
@@ -92,6 +103,10 @@ export default function Home() {
     
     const updatedMessages = [...currentMessages, newUserMessage];
     updateConversation(currentConversationId!, { messages: updatedMessages });
+
+    if (!user) {
+      setSessionMessageCount(prev => prev + 1);
+    }
 
     if (!prompt) {
       setInput('');
@@ -233,18 +248,17 @@ export default function Home() {
 
   return (
     <SidebarProvider>
+      <AuthModal open={isAuthModalOpen} onOpenChange={setIsAuthModalOpen} />
       <div className="flex h-dvh bg-background text-foreground">
         <Sidebar>
-          <SidebarHeader>
-            <div className="flex items-center justify-between p-2">
+          <SidebarHeader className="p-2">
+            <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold">Conversations</h2>
             </div>
-            <div className="p-2">
-              <Button variant="outline" className="w-full" onClick={startNewChat}>
-                <Plus className="mr-2" />
-                New Chat
-              </Button>
-            </div>
+            <Button variant="outline" className="w-full" onClick={startNewChat}>
+              <Plus className="mr-2" />
+              New Chat
+            </Button>
           </SidebarHeader>
           <ScrollArea className="flex-1">
             <SidebarContent className="p-2">
@@ -277,7 +291,11 @@ export default function Home() {
                 Auravo AI
               </h1>
             </div>
-            <div className="w-8"></div>
+             {user ? (
+                <UserNav />
+              ) : (
+                <Button onClick={() => setIsAuthModalOpen(true)}>Login</Button>
+              )}
           </header>
 
           <div className="flex-1 overflow-y-auto">

@@ -178,11 +178,6 @@ const Sidebar = React.forwardRef<
             }
           >
             <div className="flex h-full w-full flex-col">
-              <SheetClose asChild>
-                <Button variant="ghost" size="icon" className="absolute right-2 top-2 z-10">
-                  <X />
-                </Button>
-              </SheetClose>
               {children}
             </div>
           </SheetContent>
@@ -239,12 +234,24 @@ const SidebarHeader = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div">
 >(({ className, ...props }, ref) => {
+  const { isMobile } = useSidebar();
   return (
     <div
       ref={ref}
       className={cn("flex flex-col gap-2", className)}
       {...props}
-    />
+    >
+      {isMobile && (
+        <div className="absolute right-2 top-2">
+        <SheetClose asChild>
+          <Button variant="ghost" size="icon">
+            <X />
+          </Button>
+        </SheetClose>
+        </div>
+      )}
+      {props.children}
+    </div>
   )
 })
 SidebarHeader.displayName = "SidebarHeader"
