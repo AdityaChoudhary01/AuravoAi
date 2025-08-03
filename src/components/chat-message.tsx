@@ -52,7 +52,7 @@ export function ChatMessage({ message, isLoading = false }: ChatMessageProps) {
       animate="visible"
       className={cn(
         'flex items-start gap-3',
-        isUser ? 'justify-end' : 'justify-start'
+        isUser ? 'justify-end' : 'justify-start w-full'
       )}
     >
       {!isUser && (
@@ -64,10 +64,10 @@ export function ChatMessage({ message, isLoading = false }: ChatMessageProps) {
       )}
       <div
         className={cn(
-          'rounded-lg p-3 text-sm shadow-md',
+          'rounded-lg p-3 text-sm',
           isUser
-            ? 'max-w-[90%] bg-primary text-primary-foreground sm:max-w-[80%]'
-            : 'w-full bg-secondary text-secondary-foreground',
+            ? 'max-w-[90%] bg-primary text-primary-foreground shadow-md sm:max-w-[80%]'
+            : 'text-secondary-foreground',
           isImage && 'p-0 overflow-hidden'
         )}
       >
