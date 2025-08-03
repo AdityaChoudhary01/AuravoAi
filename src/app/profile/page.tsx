@@ -8,7 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
-import { uploadAvatar } from './actions';
 import { LoaderCircle } from 'lucide-react';
 import { updateProfile } from 'firebase/auth';
 import { auth } from '@/lib/firebase';
@@ -62,10 +61,19 @@ export default function ProfilePage() {
       
       if (avatarFile) {
         const formData = new FormData();
-        formData.append('avatar', avatarFile);
-        const result = await uploadAvatar(formData);
-        if (result.photoURL) {
-            photoURL = result.photoURL;
+        formData.append('file', avatarFile);
+        formData.append('upload_preset', process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET!);
+        
+        const response = await fetch(`https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME!}/image/upload`, {
+          method: 'POST',
+          body: formData,
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          photoURL = data.secure_url;
+        } else {
+          throw new Error('Image upload failed');
         }
       }
 
