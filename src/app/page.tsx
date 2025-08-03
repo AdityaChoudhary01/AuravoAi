@@ -5,7 +5,6 @@ import { generateInitialPrompts } from '@/ai/flows/generate-initial-prompt';
 import { ChatMessage, type ChatMessageProps } from '@/components/chat-message';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { Textarea } from '@/components/ui/textarea';
 import { motion } from 'framer-motion';
 import { Bot, LoaderCircle, SendHorizontal } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
@@ -171,8 +170,7 @@ export default function Home() {
             onSubmit={handleFormSubmit}
             className="relative mx-auto flex w-full max-w-3xl items-end space-x-2 rounded-2xl border bg-secondary/50 p-2 shadow-lg transition-all focus-within:ring-2 focus-within:ring-primary"
           >
-            <Textarea
-              as={TextareaAutosize}
+            <TextareaAutosize
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type your message here..."
