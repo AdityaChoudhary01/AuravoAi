@@ -4,12 +4,6 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Footer } from '@/components/footer';
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-    title: 'Privacy Policy',
-    description: 'Read the Privacy Policy for Auravo AI to understand how we collect, use, and protect your data when you use our application.',
-};
 
 export default function PrivacyPolicyPage() {
   return (

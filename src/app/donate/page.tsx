@@ -8,12 +8,6 @@ import { Button } from '@/components/ui/button';
 import { Footer } from '@/components/footer';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Coffee, Heart, Server, Sparkles } from 'lucide-react';
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-    title: 'Donate to Support Auravo AI',
-    description: 'Support the development and maintenance of Auravo AI. Your contributions help cover server costs and allow for new feature development.',
-};
 
 export default function DonatePage() {
     const upiQRCodeUrl = 'https://res.cloudinary.com/dmtnonxtt/image/upload/v1752488580/GooglePay_QR_xtgkh4.png';

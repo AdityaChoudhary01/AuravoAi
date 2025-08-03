@@ -5,12 +5,6 @@ import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Footer } from '@/components/footer';
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-    title: 'About Auravo AI',
-    description: 'Learn about the mission and vision behind Auravo AI, a cutting-edge chat application designed to provide intelligent, helpful, and engaging conversations.',
-};
 
 export default function AboutPage() {
   return (

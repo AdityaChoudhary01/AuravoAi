@@ -16,12 +16,6 @@ import { submitContactForm } from './actions';
 import { LoaderCircle } from 'lucide-react';
 import { useState } from 'react';
 import { Footer } from '@/components/footer';
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-    title: 'Contact Us',
-    description: 'Get in touch with the Auravo AI team. We welcome your questions, feedback, and suggestions.',
-};
 
 const contactFormSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),

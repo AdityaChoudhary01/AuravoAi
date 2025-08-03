@@ -4,12 +4,6 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { Footer } from '@/components/footer';
-import type { Metadata } from 'next';
-
-export const metadata: Metadata = {
-    title: 'Terms of Service',
-    description: 'Read the Terms of Service for Auravo AI to understand the rules and guidelines for using our application.',
-};
 
 export default function TermsOfServicePage() {
   return (
