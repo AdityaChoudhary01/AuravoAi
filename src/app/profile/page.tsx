@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/hooks/use-toast';
 import { updateUserProfile } from './actions';
 import { LoaderCircle } from 'lucide-react';
+import { updateProfile } from 'firebase/auth';
 
 export default function ProfilePage() {
   const { user, loading } = useAuth();
@@ -63,12 +64,14 @@ export default function ProfilePage() {
     
     try {
       await updateUserProfile(formData);
+      // Since server actions can't reliably update the client's auth state,
+      // we can optimistically update the name on the client, or just reload.
+      // For simplicity and to ensure data is fresh from Firebase, we'll reload.
       toast({
         title: 'Success',
-        description: 'Your profile has been updated.',
+        description: 'Your profile has been updated. Refreshing the page...',
       });
-      // This is a simple way to refresh user state. A more complex app might re-fetch it.
-      window.location.reload(); 
+      setTimeout(() => window.location.reload(), 1500);
     } catch (error) {
       console.error(error);
       toast({
