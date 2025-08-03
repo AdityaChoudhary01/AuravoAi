@@ -15,6 +15,7 @@ import { useEffect, useRef, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { summarizeConversation } from '@/ai/flows/summarize-conversation';
 import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 type Message = ChatMessageProps['message'];
 
@@ -235,33 +236,37 @@ export default function Home() {
       <div className="flex h-dvh bg-background text-foreground">
         <Sidebar>
           <SidebarHeader>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between p-2">
               <h2 className="text-lg font-semibold">Conversations</h2>
             </div>
-            <Button variant="outline" className="w-full" onClick={startNewChat}>
-              <Plus className="mr-2" />
-              New Chat
-            </Button>
+            <div className="p-2">
+              <Button variant="outline" className="w-full" onClick={startNewChat}>
+                <Plus className="mr-2" />
+                New Chat
+              </Button>
+            </div>
           </SidebarHeader>
-          <SidebarContent className="p-2">
-            <SidebarMenu>
-              {conversations.map((conv) => (
-                <SidebarMenuItem key={conv.id}>
-                  <SidebarMenuButton
-                    onClick={() => setCurrentConversationId(conv.id)}
-                    isActive={currentConversationId === conv.id}
-                    className="w-full justify-start"
-                  >
-                    <MessageSquare />
-                    <span>{conv.title}</span>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarContent>
+          <ScrollArea className="flex-1">
+            <SidebarContent className="p-2">
+              <SidebarMenu>
+                {conversations.map((conv) => (
+                  <SidebarMenuItem key={conv.id}>
+                    <SidebarMenuButton
+                      onClick={() => setCurrentConversationId(conv.id)}
+                      isActive={currentConversationId === conv.id}
+                      className="w-full justify-start"
+                    >
+                      <MessageSquare />
+                      <span>{conv.title}</span>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </SidebarContent>
+          </ScrollArea>
         </Sidebar>
 
-        <div className="flex flex-1 flex-col">
+        <main className="flex flex-1 flex-col">
           <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-white/10 bg-background/50 px-4 shadow-sm backdrop-blur-sm">
             <SidebarTrigger />
             <div className="flex flex-1 items-center justify-center gap-3 text-center font-headline text-2xl font-semibold sm:text-3xl">
@@ -275,7 +280,7 @@ export default function Home() {
             <div className="w-8"></div>
           </header>
 
-          <main className="flex-1 overflow-y-auto">
+          <div className="flex-1 overflow-y-auto">
             <div className="mx-auto w-full max-w-5xl flex-1 space-y-6 p-4 md:p-6">
               {currentMessages.length === 0 && !isLoading ? (
                 <div className="flex h-full flex-col items-center justify-center text-center">
@@ -322,7 +327,7 @@ export default function Home() {
               {isLoading && <ChatMessage isLoading />}
               <div ref={messagesEndRef} />
             </div>
-          </main>
+          </div>
 
           <motion.div
             initial={{ y: 100, opacity: 0 }}
@@ -382,10 +387,8 @@ export default function Home() {
               </form>
             </div>
           </motion.div>
-        </div>
+        </main>
       </div>
     </SidebarProvider>
   );
 }
-
-    

@@ -170,7 +170,7 @@ const Sidebar = React.forwardRef<
         <Sheet open={openMobile} onOpenChange={setOpenMobile}>
           <SheetContent
             side={side}
-            className="w-[var(--sidebar-width)] bg-background p-0"
+            className="w-full bg-background p-0"
             style={
               {
                 "--sidebar-width": SIDEBAR_WIDTH_MOBILE,
@@ -196,7 +196,7 @@ const Sidebar = React.forwardRef<
         data-state={state}
         className={cn(
           "hidden h-full md:flex flex-col bg-background border-r border-border transition-[width] duration-300 ease-in-out",
-          state === 'collapsed' ? 'w-0' : 'w-[var(--sidebar-width)]',
+          state === 'collapsed' ? 'w-0 overflow-hidden' : 'w-[var(--sidebar-width)]',
           className
         )}
         {...props}
@@ -242,7 +242,7 @@ const SidebarHeader = React.forwardRef<
   return (
     <div
       ref={ref}
-      className={cn("flex flex-col gap-2 p-2", className)}
+      className={cn("flex flex-col gap-2", className)}
       {...props}
     />
   )
@@ -257,7 +257,7 @@ const SidebarContent = React.forwardRef<
     <div
       ref={ref}
       className={cn(
-        "flex min-h-0 flex-1 flex-col gap-2 overflow-auto",
+        "flex min-h-0 flex-1 flex-col gap-2",
         className
       )}
       {...props}
@@ -331,5 +331,3 @@ export {
   SidebarTrigger,
   useSidebar,
 }
-
-    
