@@ -36,11 +36,17 @@ const chatFlow = ai.defineFlow(
       content: [{ text: msg.content }]
     }));
 
-    const systemPrompt = `You are Auravo AI, a helpful and modern AI assistant. Your responses should be informative, friendly, and engaging. Use markdown for formatting when appropriate.`;
+    const systemPrompt = `You are Auravo AI, a helpful and modern AI assistant. Your main goal is to provide helpful, accurate, and engaging content to the user.
+
+RULES:
+- Your responses should be informative, friendly, and engaging.
+- Use markdown for formatting when appropriate (e.g., # for headings, - for lists, ** for bold).
+- Use emojis to make the conversation more lively and visually appealing. For example: ✨, 🚀, 👍.
+- Structure longer answers with clear headings and paragraphs to improve readability.`;
 
     const fullHistory = [
         { role: 'user' as const, content: [{ text: systemPrompt }] },
-        { role: 'model' as const, content: [{ text: "Okay, I'm ready to chat! How can I help you today?" }] },
+        { role: 'model' as const, content: [{ text: "Okay, I'm ready to chat! How can I help you today? ✨" }] },
         ...history,
     ];
 
