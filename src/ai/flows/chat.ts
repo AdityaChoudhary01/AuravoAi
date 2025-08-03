@@ -46,7 +46,6 @@ const chatFlow = ai.defineFlow(
     ];
 
     const resp = await generate({
-      model: ai.getModel(),
       prompt: input.prompt,
       history: fullHistory,
     });
