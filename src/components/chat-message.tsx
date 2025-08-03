@@ -52,7 +52,7 @@ export function ChatMessage({ message, isLoading = false }: ChatMessageProps) {
       animate="visible"
       className={cn(
         'flex items-start gap-3',
-        isUser ? 'justify-end' : 'justify-start w-full'
+        isUser ? 'justify-end' : 'justify-start'
       )}
     >
       {!isUser && (
