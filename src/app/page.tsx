@@ -4,13 +4,6 @@ import { chat, type ChatInput } from '@/ai/flows/chat';
 import { generateInitialPrompts } from '@/ai/flows/generate-initial-prompt';
 import { ChatMessage, type ChatMessageProps } from '@/components/chat-message';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Textarea } from '@/components/ui/textarea';
 import { Bot, LoaderCircle, SendHorizontal } from 'lucide-react';
@@ -87,17 +80,17 @@ export default function Home() {
   };
 
   return (
-    <main className="flex min-h-screen w-full flex-col items-center justify-center bg-background p-4 sm:p-6 md:p-8">
-      <Card className="flex h-full w-full max-w-4xl flex-col shadow-2xl">
-        <CardHeader className="border-b">
-          <CardTitle className="flex items-center justify-center gap-2 text-center font-headline text-xl font-semibold sm:text-2xl">
-            <Bot className="h-7 w-7 text-primary" />
-            Auravo AI
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="flex-1 overflow-hidden p-2 sm:p-4 md:p-6">
-          <ScrollArea className="h-full pr-4">
-            <div className="space-y-6">
+    <main className="flex h-screen w-full flex-col bg-background">
+      <header className="border-b p-4">
+        <div className="container mx-auto flex items-center justify-center gap-2 text-center font-headline text-xl font-semibold sm:text-2xl">
+          <Bot className="h-7 w-7 text-primary" />
+          <h1 className="text-xl font-semibold">Auravo AI</h1>
+        </div>
+      </header>
+      <div className="flex-1 overflow-hidden">
+        <ScrollArea className="h-full">
+          <div className="container mx-auto flex h-full flex-col justify-between p-4 md:p-6">
+            <div className="flex-1 space-y-6 pb-4">
               {messages.length === 0 && !isLoading ? (
                 <div className="flex h-full flex-col items-center justify-center text-center">
                   <div className="mb-4 rounded-full bg-primary/10 p-4">
@@ -127,37 +120,37 @@ export default function Home() {
               {isLoading && <ChatMessage isLoading />}
               <div ref={messagesEndRef} />
             </div>
-          </ScrollArea>
-        </CardContent>
-        <CardFooter className="border-t pt-4 sm:pt-6">
-          <form
-            onSubmit={handleFormSubmit}
-            className="flex w-full items-start space-x-2"
-          >
-            <Textarea
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Type your message here..."
-              className="flex-1 resize-none"
-              onKeyDown={handleKeyDown}
-              disabled={isLoading}
-              rows={1}
-            />
-            <Button
-              type="submit"
-              size="icon"
-              disabled={isLoading || !input.trim()}
-              aria-label="Send message"
-            >
-              {isLoading ? (
-                <LoaderCircle className="h-5 w-5 animate-spin" />
-              ) : (
-                <SendHorizontal className="h-5 w-5" />
-              )}
-            </Button>
-          </form>
-        </CardFooter>
-      </Card>
+            <div className="sticky bottom-0 bg-background pt-4">
+              <form
+                onSubmit={handleFormSubmit}
+                className="flex w-full items-start space-x-2"
+              >
+                <Textarea
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Type your message here..."
+                  className="flex-1 resize-none"
+                  onKeyDown={handleKeyDown}
+                  disabled={isLoading}
+                  rows={1}
+                />
+                <Button
+                  type="submit"
+                  size="icon"
+                  disabled={isLoading || !input.trim()}
+                  aria-label="Send message"
+                >
+                  {isLoading ? (
+                    <LoaderCircle className="h-5 w-5 animate-spin" />
+                  ) : (
+                    <SendHorizontal className="h-5 w-5" />
+                  )}
+                </Button>
+              </form>
+            </div>
+          </div>
+        </ScrollArea>
+      </div>
     </main>
   );
 }

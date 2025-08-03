@@ -21,7 +21,7 @@ export function ChatMessage({ message, isLoading = false }: ChatMessageProps) {
             <Bot className="h-5 w-5 text-primary" />
           </AvatarFallback>
         </Avatar>
-        <div className="flex items-center justify-center rounded-lg bg-card p-3 text-sm shadow-sm">
+        <div className="flex items-center justify-center rounded-lg bg-secondary p-3 text-sm shadow-sm">
           <LoaderCircle className="h-5 w-5 animate-spin text-primary" />
         </div>
       </div>
@@ -49,7 +49,7 @@ export function ChatMessage({ message, isLoading = false }: ChatMessageProps) {
           'max-w-[80%] rounded-lg p-3 text-sm shadow-sm',
           isUser
             ? 'bg-primary text-primary-foreground'
-            : 'bg-card'
+            : 'bg-secondary text-secondary-foreground'
         )}
       >
         <p className="whitespace-pre-wrap">{message.content}</p>
