@@ -2,6 +2,7 @@
 'use server';
 
 import { z } from 'zod';
+import nodemailer from 'nodemailer';
 
 const contactFormSchema = z.object({
   name: z.string().min(2, { message: 'Name must be at least 2 characters.' }),
@@ -11,29 +12,46 @@ const contactFormSchema = z.object({
 
 /**
  * Server action to handle the contact form submission.
- * In a real application, this would integrate with an email service (e.g., Resend, SendGrid)
- * or save the message to a database.
+ * This now uses Nodemailer to send the submission as an email.
  */
 export async function submitContactForm(values: z.infer<typeof contactFormSchema>) {
   // Validate the form values
   const validatedData = contactFormSchema.parse(values);
 
-  // For now, we'll just log the data to the console.
-  console.log('New contact form submission:');
-  console.log('Name:', validatedData.name);
-  console.log('Email:', validatedData.email);
-  console.log('Message:', validatedData.message);
+  // Create a transporter using your email service's SMTP settings.
+  // These should be stored in your .env.local file.
+  const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT),
+    secure: Number(process.env.SMTP_PORT) === 465, // true for 465, false for other ports
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS,
+    },
+  });
 
-  // Simulate a network delay
-  await new Promise(resolve => setTimeout(resolve, 1000));
+  try {
+    // Send the email
+    await transporter.sendMail({
+      from: `"${validatedData.name}" <${process.env.SMTP_USER}>`, // Sender's name and authorized email
+      to: process.env.MAIL_TO, // Your receiving email address
+      replyTo: validatedData.email, // Set the reply-to to the user's email
+      subject: `New Contact Form Message from ${validatedData.name}`,
+      html: `
+        <h1>New Contact Form Submission</h1>
+        <p><strong>Name:</strong> ${validatedData.name}</p>
+        <p><strong>Email:</strong> ${validatedData.email}</p>
+        <hr />
+        <h2>Message:</h2>
+        <p>${validatedData.message.replace(/\n/g, '<br>')}</p>
+      `,
+    });
 
-  // In a real app, you would add your logic here, e.g.:
-  // await sendEmail({
-  //   to: 'your-email@example.com',
-  //   from: 'noreply@yourapp.com',
-  //   subject: `New message from ${validatedData.name}`,
-  //   html: `<p>Email: ${validatedData.email}</p><p>${validatedData.message}</p>`,
-  // });
-
-  return { success: true, message: 'Your message has been sent successfully!' };
+    return { success: true, message: 'Your message has been sent successfully!' };
+  } catch (error) {
+    console.error('Failed to send email:', error);
+    // In a real app, you might want more sophisticated error handling.
+    // For now, we'll throw a generic error.
+    throw new Error('Failed to send message. Please try again later.');
+  }
 }
