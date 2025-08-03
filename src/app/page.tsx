@@ -350,6 +350,7 @@ export default function Home() {
               )}
               {isLoading && <ChatMessage isLoading />}
               <div ref={messagesEndRef} />
+              <Footer />
             </div>
           </div>
 
@@ -411,7 +412,6 @@ export default function Home() {
               </form>
             </div>
           </motion.div>
-          <Footer />
         </main>
       </div>
     </SidebarProvider>
