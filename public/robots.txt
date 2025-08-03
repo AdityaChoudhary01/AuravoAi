@@ -4,4 +4,4 @@ Allow: /
 Disallow: /profile/
 Disallow: /admin/
 
-Sitemap: https://www.auravo.ai/sitemap.xml
+Sitemap: https://auravoai.vercel.app/sitemap.xml
