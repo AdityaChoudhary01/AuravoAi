@@ -12,7 +12,7 @@ export function Footer() {
           <GeminiIcon className="h-6 w-6" />
           <p className="text-lg font-semibold">Auravo AI</p>
         </div>
-        <div className="flex items-center gap-6 text-sm text-muted-foreground">
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-sm text-muted-foreground">
           <Link href="/" className="transition-colors hover:text-foreground">
             Home
           </Link>
@@ -24,6 +24,12 @@ export function Footer() {
           </Link>
           <Link href="/donate" className="transition-colors hover:text-foreground">
             Donate
+          </Link>
+          <Link href="/privacy" className="transition-colors hover:text-foreground">
+            Privacy Policy
+          </Link>
+          <Link href="/terms" className="transition-colors hover:text-foreground">
+            Terms of Service
           </Link>
         </div>
         <div className="text-sm text-muted-foreground">
