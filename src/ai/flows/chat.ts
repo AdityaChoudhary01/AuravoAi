@@ -1,7 +1,6 @@
 'use server';
 
 import { ai } from '@/ai/genkit';
-import { generate } from 'genkit';
 import { z } from 'genkit';
 import { generateImage } from './generate-image';
 
@@ -45,7 +44,7 @@ const chatFlow = ai.defineFlow(
         ...history,
     ];
 
-    const resp = await generate({
+    const resp = await ai.generate({
       prompt: input.prompt,
       history: fullHistory,
     });
