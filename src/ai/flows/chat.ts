@@ -1,0 +1,54 @@
+// src/ai/flows/chat.ts
+'use server';
+
+import { ai } from '@/ai/genkit';
+import { z } from 'genkit';
+import { generate } from 'genkit';
+
+const ChatInputSchema = z.object({
+  history: z.array(z.object({
+    role: z.enum(['user', 'model']),
+    content: z.string()
+  })),
+  prompt: z.string(),
+});
+export type ChatInput = z.infer<typeof ChatInputSchema>;
+
+const ChatOutputSchema = z.object({
+  response: z.string(),
+});
+export type ChatOutput = z.infer<typeof ChatOutputSchema>;
+
+const chatFlow = ai.defineFlow(
+  {
+    name: 'chatFlow',
+    inputSchema: ChatInputSchema,
+    outputSchema: ChatOutputSchema,
+  },
+  async (input) => {
+    const history = input.history.map(msg => ({
+      role: msg.role,
+      content: [{ text: msg.content }]
+    }));
+
+    const systemPrompt = `You are Auravo AI, a helpful and modern AI assistant. Your responses should be informative, friendly, and engaging. Use markdown for formatting when appropriate.`;
+
+    const fullHistory = [
+        { role: 'user' as const, content: [{ text: systemPrompt }] },
+        { role: 'model' as const, content: [{ text: "Okay, I'm ready to chat! How can I help you today?" }] },
+        ...history,
+    ];
+
+    const resp = await generate({
+      model: ai.getModel(),
+      prompt: input.prompt,
+      history: fullHistory,
+    });
+
+    return { response: resp.text };
+  }
+);
+
+export async function chat(input: ChatInput): Promise<ChatOutput> {
+  return chatFlow(input);
+}
