@@ -48,8 +48,10 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
   const { signInWithGoogle, signUpWithEmail, signInWithEmail } = useAuth();
   const { toast } = useToast();
 
-  const form = useForm<z.infer<typeof (isLoginView ? loginSchema : signupSchema)>>({
-    resolver: zodResolver(isLoginView ? loginSchema : signupSchema),
+  const formSchema = isLoginView ? loginSchema : signupSchema;
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
     defaultValues: {
       email: '',
       password: '',
@@ -74,13 +76,14 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
     }
   };
 
-  const onSubmit = async (values: any) => {
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setIsLoading(true);
       if (isLoginView) {
         await signInWithEmail(values.email, values.password);
       } else {
-        await signUpWithEmail(values.email, values.password, values.name);
+        const signupValues = values as z.infer<typeof signupSchema>;
+        await signUpWithEmail(signupValues.email, signupValues.password, signupValues.name);
       }
       onOpenChange(false);
     } catch (error: any) {
@@ -171,7 +174,11 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
           {isLoginView ? "Don't have an account?" : 'Already have an account?'}
           <Button variant="link" onClick={() => {
             setIsLoginView(!isLoginView);
-            form.reset();
+            form.reset({
+                email: '',
+                password: '',
+                ...(isLoginView ? {} : { name: '' }),
+            });
           }}>
             {isLoginView ? 'Sign up' : 'Login'}
           </Button>
