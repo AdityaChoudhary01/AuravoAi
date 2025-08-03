@@ -3,6 +3,7 @@
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { cn } from '@/lib/utils';
 import { Bot, LoaderCircle, User } from 'lucide-react';
+import Markdown from 'react-markdown';
 
 export type ChatMessageProps = {
   message: {
@@ -52,7 +53,9 @@ export function ChatMessage({ message, isLoading = false }: ChatMessageProps) {
             : 'bg-secondary text-secondary-foreground'
         )}
       >
-        <p className="whitespace-pre-wrap">{message.content}</p>
+        <article className="prose prose-sm max-w-none text-current prose-p:m-0 prose-headings:m-0">
+          <Markdown>{message.content}</Markdown>
+        </article>
       </div>
       {isUser && (
         <Avatar className="h-8 w-8 border bg-background">
