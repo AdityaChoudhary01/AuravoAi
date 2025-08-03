@@ -180,7 +180,7 @@ export default function Home() {
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-transparent">
             <GeminiIcon className="h-6 w-6" />
           </div>
-          <h1 className="bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent">Auravo AI</h1>
+          <h1 className="text-primary">Auravo AI</h1>
         </div>
       </motion.header>
       <div className="flex flex-1 overflow-hidden">

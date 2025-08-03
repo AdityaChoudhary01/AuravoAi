@@ -67,7 +67,7 @@ export function ChatMessage({ message, isLoading = false }: ChatMessageProps) {
         className={cn(
           'rounded-lg p-3 text-sm',
           isUser
-            ? 'max-w-[90%] bg-gradient-to-br from-primary to-accent text-primary-foreground shadow-md sm:max-w-[80%]'
+            ? 'max-w-[90%] bg-secondary text-secondary-foreground shadow-md sm:max-w-[80%]'
             : 'bg-transparent shadow-none',
           isImage ? 'p-0 overflow-hidden' : 'pt-0'
         )}
