@@ -178,7 +178,7 @@ const Sidebar = React.forwardRef<
     },
     ref
   ) => {
-    const { isMobile, state, open, openMobile, setOpenMobile } = useSidebar()
+    const { isMobile, state, openMobile, setOpenMobile } = useSidebar()
     
     const finalCollapsible = isMobile ? 'offcanvas' : collapsible;
 
@@ -338,7 +338,6 @@ const SidebarHeader = React.forwardRef<
   HTMLDivElement,
   React.ComponentProps<"div">
 >(({ className, ...props }, ref) => {
-  const { isMobile } = useSidebar();
   return (
     <div
       ref={ref}
@@ -348,13 +347,6 @@ const SidebarHeader = React.forwardRef<
     >
       <div className="flex items-center justify-between">
         <div className="flex-1">{props.children}</div>
-        {isMobile && (
-          <SheetClose asChild>
-            <Button variant="ghost" size="icon" className="h-7 w-7">
-              <X />
-            </Button>
-          </SheetClose>
-        )}
       </div>
     </div>
   )
