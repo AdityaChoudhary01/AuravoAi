@@ -84,6 +84,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        <meta name="msvalidate.01" content="2395AC146C62BB5D66E421F75E9E7DCF" />
         <meta name="google-site-verification" content="YX_PQiZx-77ddG15mAgILKKK1bfUrvCMgc4zbSd0Hgs" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
