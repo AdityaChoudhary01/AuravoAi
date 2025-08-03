@@ -80,7 +80,7 @@ export function ChatMessage({ message, isLoading = false }: ChatMessageProps) {
             className="rounded-lg"
           />
         ) : (
-          <article className="prose prose-sm max-w-none text-current prose-p:m-0 prose-headings:my-2 prose-headings:font-semibold prose-headings:text-current prose-ul:my-2 prose-li:my-0">
+          <article className="prose prose-sm prose-invert max-w-none text-current prose-p:m-0 prose-headings:my-2 prose-headings:font-semibold prose-headings:text-current prose-ul:my-2 prose-li:my-0">
             <Markdown>{message.content}</Markdown>
           </article>
         )}
