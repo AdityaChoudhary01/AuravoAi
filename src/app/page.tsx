@@ -176,11 +176,13 @@ export default function Home() {
         transition={{ duration: 0.5, ease: 'easeOut' }}
         className="border-b border-white/10 p-4 shadow-sm"
       >
-        <div className="mx-auto flex max-w-3xl items-center justify-center gap-2 text-center font-headline text-xl font-semibold sm:text-2xl">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-transparent">
-            <GeminiIcon className="h-6 w-6" />
+        <div className="mx-auto flex max-w-3xl items-center justify-center gap-3 text-center font-headline text-2xl font-semibold sm:text-3xl">
+          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-transparent">
+            <GeminiIcon className="h-8 w-8" />
           </div>
-          <h1 className="text-primary">Auravo AI</h1>
+          <h1 className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            Auravo AI
+          </h1>
         </div>
       </motion.header>
       <div className="flex flex-1 overflow-hidden">
@@ -296,3 +298,5 @@ export default function Home() {
     </div>
   );
 }
+
+    
