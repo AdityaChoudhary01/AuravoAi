@@ -49,7 +49,6 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  manifest: '/site.webmanifest',
 };
 
 export default function RootLayout({
