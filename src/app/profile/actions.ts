@@ -18,12 +18,14 @@ export async function updateUserProfile(formData: FormData) {
   const user = auth.currentUser;
 
   if (!user) {
+    // This check is now primarily a safeguard. 
+    // The main check should happen on the client before calling this action.
     throw new Error('You must be logged in to update your profile.');
   }
 
   let photoURL = user.photoURL;
 
-  if (avatarFile) {
+  if (avatarFile && avatarFile.size > 0) {
     const arrayBuffer = await avatarFile.arrayBuffer();
     const buffer = new Uint8Array(arrayBuffer);
     

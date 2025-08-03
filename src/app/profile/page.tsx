@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -13,11 +13,18 @@ import { LoaderCircle } from 'lucide-react';
 
 export default function ProfilePage() {
   const { user, loading } = useAuth();
-  const [name, setName] = useState(user?.displayName || '');
+  const [name, setName] = useState('');
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
-  const [avatarPreview, setAvatarPreview] = useState(user?.photoURL || '');
+  const [avatarPreview, setAvatarPreview] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+
+  useEffect(() => {
+    if (user) {
+      setName(user.displayName || '');
+      setAvatarPreview(user.photoURL || '');
+    }
+  }, [user]);
 
   if (loading) {
     return <div className="flex justify-center items-center h-screen"><LoaderCircle className="animate-spin" /></div>;
@@ -37,6 +44,15 @@ export default function ProfilePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) {
+        toast({
+            title: 'Error',
+            description: 'You must be logged in to update your profile.',
+            variant: 'destructive',
+        });
+        return;
+    }
+
     setIsSubmitting(true);
 
     const formData = new FormData();
