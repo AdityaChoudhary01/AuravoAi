@@ -4,58 +4,77 @@
 
 @layer base {
   :root {
-    --background: 240 5% 12%;
-    --foreground: 210 40% 98%;
-    --card: 240 5% 12%;
-    --card-foreground: 210 40% 98%;
-    --popover: 240 5% 12%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 240 4% 18%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 240 4% 18%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 240 4% 18%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 240 4% 18%;
-    --input: 240 4% 18%;
-    --ring: 240 4.9% 83.9%;
-    --chart-1: 12 76% 61%;
-    --chart-2: 173 58% 39%;
-    --chart-3: 197 37% 24%;
-    --chart-4: 43 74% 66%;
-    --chart-5: 27 87% 67%;
-    --radius: 0.5rem;
+    --background: 270 95% 4%; /* Deep, dark purple - Almost black */
+    --foreground: 270 15% 96%; /* Very light lavender for text */
+    
+    --card: 270 90% 9%; /* Slightly lighter dark purple */
+    --card-foreground: 270 15% 96%;
+    
+    --popover: 270 90% 9%;
+    --popover-foreground: 270 15% 96%;
+    
+    --primary: 276 85% 60%; /* Vibrant Purple (A020F0) */
+    --primary-foreground: 270 15% 98%; /* Light text for primary buttons */
+
+    --secondary: 270 70% 12%; /* Darker purple for secondary elements */
+    --secondary-foreground: 270 15% 90%;
+    
+    --muted: 270 70% 12%;
+    --muted-foreground: 270 10% 65%; /* Desaturated lavender for muted text */
+    
+    --accent: 330 100% 71%; /* Vivid Pink (FF69B4) */
+    --accent-foreground: 330 95% 10%; /* Dark text for accent elements */
+
+    --destructive: 0 72% 51%; /* Standard red for destructive actions */
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 270 80% 15%; /* Purple-tinted border */
+    --input: 270 80% 15%;
+    --ring: 276 85% 65%; /* Ring color based on primary */
+    
+    --radius: 0.75rem;
+
+    --chart-1: 276 85% 60%; /* primary */
+    --chart-2: 330 100% 71%; /* accent */
+    --chart-3: 210 90% 65%; /* A bright blue */
+    --chart-4: 30 90% 60%; /* A vibrant orange */
+    --chart-5: 150 80% 55%; /* A sea green */
   }
 
   .dark {
-    --background: 240 5% 12%;
-    --foreground: 210 40% 98%;
-    --card: 240 5% 12%;
-    --card-foreground: 210 40% 98%;
-    --popover: 240 5% 12%;
-    --popover-foreground: 210 40% 98%;
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-    --secondary: 240 4% 18%;
-    --secondary-foreground: 210 40% 98%;
-    --muted: 240 4% 18%;
-    --muted-foreground: 215 20.2% 65.1%;
-    --accent: 240 4% 18%;
-    --accent-foreground: 210 40% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 240 4% 18%;
-    --input: 240 4% 18%;
-    --ring: 240 4.9% 83.9%;
-    --chart-1: 220 70% 50%;
-    --chart-2: 160 60% 45%;
-    --chart-3: 30 80% 55%;
-    --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%;
+    --background: 270 95% 4%; /* Deep, dark purple - Almost black */
+    --foreground: 270 15% 96%; /* Very light lavender for text */
+    
+    --card: 270 90% 9%; /* Slightly lighter dark purple */
+    --card-foreground: 270 15% 96%;
+    
+    --popover: 270 90% 9%;
+    --popover-foreground: 270 15% 96%;
+    
+    --primary: 276 85% 60%; /* Vibrant Purple (A020F0) */
+    --primary-foreground: 270 15% 98%; /* Light text for primary buttons */
+
+    --secondary: 270 S% 12%; /* Darker purple for secondary elements */
+    --secondary-foreground: 270 15% 90%;
+    
+    --muted: 270 70% 12%;
+    --muted-foreground: 270 10% 65%; /* Desaturated lavender for muted text */
+    
+    --accent: 330 100% 71%; /* Vivid Pink (FF69B4) */
+    --accent-foreground: 330 95% 10%; /* Dark text for accent elements */
+
+    --destructive: 0 72% 51%; /* Standard red for destructive actions */
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 270 80% 15%; /* Purple-tinted border */
+    --input: 270 80% 15%;
+    --ring: 276 85% 65%; /* Ring color based on primary */
+
+    --chart-1: 276 85% 60%; /* primary */
+    --chart-2: 330 100% 71%; /* accent */
+    --chart-3: 210 90% 65%; /* A bright blue */
+    --chart-4: 30 90% 60%; /* A vibrant orange */
+    --chart-5: 150 80% 55%; /* A sea green */
   }
 }
 
