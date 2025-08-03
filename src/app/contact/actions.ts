@@ -21,9 +21,7 @@ export async function submitContactForm(values: z.infer<typeof contactFormSchema
   // Create a transporter using your email service's SMTP settings.
   // These should be stored in your .env.local file.
   const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT),
-    secure: Number(process.env.SMTP_PORT) === 465, // true for 465, false for other ports
+    service: 'gmail', // Or your email provider
     auth: {
       user: process.env.SMTP_USER,
       pass: process.env.SMTP_PASS,
