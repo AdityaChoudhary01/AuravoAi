@@ -1,8 +1,6 @@
 
 'use server';
 
-import { auth } from '@/lib/firebase';
-import { updateProfile } from 'firebase/auth';
 import { v2 as cloudinary } from 'cloudinary';
 
 cloudinary.config({
