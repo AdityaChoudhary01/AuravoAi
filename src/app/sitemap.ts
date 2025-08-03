@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next'
  
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = 'https://www.auravo.ai';
+  const baseUrl = 'https://auravoai.vercel.app/';
 
   return [
     {
