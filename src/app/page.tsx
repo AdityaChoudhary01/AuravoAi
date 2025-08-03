@@ -266,16 +266,19 @@ export default function Home() {
         transition={{ duration: 0.5, ease: 'easeOut' }}
         className="relative border-b border-white/10 p-4 shadow-sm"
       >
-        <SidebarTrigger className="absolute left-4 top-1/2 -translate-y-1/2 md:hidden">
-            <Menu />
-        </SidebarTrigger>
-        <div className="mx-auto flex max-w-3xl items-center justify-center gap-3 text-center font-headline text-2xl font-semibold sm:text-3xl">
-          <div className="flex h-12 w-12 items-center justify-center rounded-full bg-transparent">
-            <GeminiIcon className="h-10 w-10" />
+        <div className="mx-auto flex max-w-3xl items-center justify-between gap-3">
+          <SidebarTrigger>
+              <Menu />
+          </SidebarTrigger>
+          <div className="flex items-center justify-center gap-3 text-center font-headline text-2xl font-semibold sm:text-3xl">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-transparent">
+              <GeminiIcon className="h-10 w-10" />
+            </div>
+            <h1 className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+              Auravo AI
+            </h1>
           </div>
-          <h1 className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Auravo AI
-          </h1>
+          <div className="w-8"></div>
         </div>
       </motion.header>
       <div className="flex flex-1 overflow-hidden">
