@@ -5,6 +5,7 @@ import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
 import { Bot, LoaderCircle, User } from 'lucide-react';
 import Markdown from 'react-markdown';
+import Image from 'next/image';
 
 export type ChatMessageProps = {
   message: {
@@ -41,6 +42,7 @@ export function ChatMessage({ message, isLoading = false }: ChatMessageProps) {
   }
 
   const isUser = message.role === 'user';
+  const isImage = message.content.startsWith('data:image');
 
   return (
     <motion.div
@@ -64,12 +66,23 @@ export function ChatMessage({ message, isLoading = false }: ChatMessageProps) {
           'max-w-[80%] rounded-lg p-3 text-sm shadow-sm',
           isUser
             ? 'bg-primary text-primary-foreground'
-            : 'bg-secondary text-secondary-foreground'
+            : 'bg-secondary text-secondary-foreground',
+          isImage && 'p-0'
         )}
       >
-        <article className="prose prose-sm max-w-none text-current prose-p:m-0 prose-headings:m-0">
-          <Markdown>{message.content}</Markdown>
-        </article>
+        {isImage ? (
+          <Image
+            src={message.content}
+            alt="Generated image"
+            width={512}
+            height={512}
+            className="rounded-lg"
+          />
+        ) : (
+          <article className="prose prose-sm max-w-none text-current prose-p:m-0 prose-headings:m-0">
+            <Markdown>{message.content}</Markdown>
+          </article>
+        )}
       </div>
       {isUser && (
         <Avatar className="h-8 w-8 border bg-background">

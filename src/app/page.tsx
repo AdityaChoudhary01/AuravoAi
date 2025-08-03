@@ -2,11 +2,14 @@
 
 import { chat, type ChatInput } from '@/ai/flows/chat';
 import { generateInitialPrompts } from '@/ai/flows/generate-initial-prompt';
+import { processAudio } from '@/ai/flows/process-audio';
 import { ChatMessage, type ChatMessageProps } from '@/components/chat-message';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { useToast } from '@/hooks/use-toast';
+import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
-import { Bot, LoaderCircle, SendHorizontal } from 'lucide-react';
+import { Bot, Image as ImageIcon, LoaderCircle, Mic, SendHorizontal, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 
@@ -18,6 +21,11 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false);
   const [initialPrompts, setInitialPrompts] = useState<string[]>([]);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const [isRecording, setIsRecording] = useState(false);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioChunksRef = useRef<Blob[]>([]);
+  const { toast } = useToast();
 
   useEffect(() => {
     async function fetchPrompts() {
@@ -91,6 +99,72 @@ export default function Home() {
       },
     }),
   };
+
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      mediaRecorderRef.current = new MediaRecorder(stream);
+      audioChunksRef.current = [];
+
+      mediaRecorderRef.current.ondataavailable = (event) => {
+        audioChunksRef.current.push(event.data);
+      };
+
+      mediaRecorderRef.current.onstop = async () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        const reader = new FileReader();
+        reader.readAsDataURL(audioBlob);
+        reader.onloadend = async () => {
+          const base64Audio = reader.result as string;
+          try {
+            setIsLoading(true);
+            const { transcript } = await processAudio({ audioDataUri: base64Audio });
+            setInput(transcript);
+          } catch (error) {
+            console.error('Error processing audio:', error);
+            toast({
+              title: 'Error',
+              description: 'Failed to process audio. Please try again.',
+              variant: 'destructive',
+            });
+          } finally {
+            setIsLoading(false);
+          }
+        };
+      };
+
+      mediaRecorderRef.current.start();
+      setIsRecording(true);
+    } catch (error) {
+      console.error('Error starting recording:', error);
+      toast({
+        title: 'Microphone Error',
+        description: 'Could not access the microphone. Please check your permissions.',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
+  };
+
+  const handleMicClick = () => {
+    if (isRecording) {
+      stopRecording();
+    } else {
+      startRecording();
+    }
+  };
+  
+  const handleImageGeneration = () => {
+    if (!input.trim()) return;
+    handleSendMessage(`/imagine ${input.trim()}`);
+  }
+
 
   return (
     <div className="flex h-screen w-full flex-col bg-background">
@@ -170,24 +244,45 @@ export default function Home() {
             onSubmit={handleFormSubmit}
             className="relative mx-auto flex w-full max-w-3xl items-end space-x-2 rounded-2xl border bg-secondary/50 p-2 shadow-lg transition-all focus-within:ring-2 focus-within:ring-primary"
           >
+             <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                onClick={handleMicClick}
+                className={cn("h-9 w-9 shrink-0 rounded-full", isRecording && "bg-red-500/20 text-red-500 hover:bg-red-500/30 hover:text-red-500")}
+                aria-label={isRecording ? 'Stop recording' : 'Start recording'}
+              >
+                {isRecording ? <X className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
+              </Button>
+               <Button
+                type="button"
+                size="icon"
+                variant="ghost"
+                disabled={isLoading || !input.trim()}
+                onClick={handleImageGeneration}
+                className="h-9 w-9 shrink-0 rounded-full"
+                aria-label="Generate image"
+              >
+                <ImageIcon className="h-5 w-5" />
+              </Button>
             <TextareaAutosize
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Type your message here..."
+              placeholder={isRecording ? 'Recording...' : 'Type your message here...'}
               className="flex-1 resize-none border-none bg-transparent shadow-none focus-visible:ring-0"
               onKeyDown={handleKeyDown}
-              disabled={isLoading}
+              disabled={isLoading || isRecording}
               maxRows={5}
               rows={1}
             />
             <Button
               type="submit"
               size="icon"
-              disabled={isLoading || !input.trim()}
+              disabled={isLoading || !input.trim() || isRecording}
               aria-label="Send message"
               className="h-9 w-9 shrink-0 rounded-full transition-transform hover:scale-110 active:scale-95"
             >
-              {isLoading ? (
+              {isLoading && !isRecording ? (
                 <LoaderCircle className="h-5 w-5 animate-spin" />
               ) : (
                 <SendHorizontal className="h-5 w-5" />

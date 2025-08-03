@@ -1,9 +1,9 @@
-// src/ai/flows/chat.ts
 'use server';
 
 import { ai } from '@/ai/genkit';
 import { generate } from 'genkit';
 import { z } from 'genkit';
+import { generateImage } from './generate-image';
 
 const ChatInputSchema = z.object({
   history: z.array(z.object({
@@ -26,6 +26,12 @@ const chatFlow = ai.defineFlow(
     outputSchema: ChatOutputSchema,
   },
   async (input) => {
+    if (input.prompt.startsWith('/imagine ')) {
+      const imagePrompt = input.prompt.replace('/imagine ', '');
+      const { imageUrl } = await generateImage({ prompt: imagePrompt });
+      return { response: imageUrl };
+    }
+
     const history = input.history.map(msg => ({
       role: msg.role,
       content: [{ text: msg.content }]
