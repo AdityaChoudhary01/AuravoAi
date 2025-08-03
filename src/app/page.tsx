@@ -10,10 +10,9 @@ import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
-import { ImageIcon, LoaderCircle, Menu, MessageSquare, Mic, Plus, SendHorizontal, X } from 'lucide-react';
+import { ImageIcon, LoaderCircle, MessageSquare, Mic, Plus, SendHorizontal, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
-import { summarizeConversation } from '@/ai/flows/summarize-conversation';
 import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useAuth } from '@/hooks/use-auth';
@@ -101,8 +100,24 @@ export default function Home() {
     setIsLoading(true);
     const newUserMessage: Message = { role: 'user', content: userMessageContent };
     
-    const updatedMessages = [...currentMessages, newUserMessage];
-    updateConversation(currentConversationId!, { messages: updatedMessages });
+    let convId = currentConversationId;
+    if (!convId) {
+        convId = startNewChat();
+    }
+
+    const conversation = conversations.find(c => c.id === convId)!;
+    const updatedMessages = [...conversation.messages, newUserMessage];
+    
+    let conversationUpdates: Partial<Conversation> = { messages: updatedMessages };
+
+    // If it's a new chat, set the title from the first message.
+    if (conversation.messages.length === 0 && conversation.title.startsWith('New Chat')) {
+        const newTitle = userMessageContent.split(' ').slice(0, 5).join(' ');
+        conversationUpdates.title = newTitle;
+    }
+
+    updateConversation(convId, conversationUpdates);
+
 
     if (!user) {
       setSessionMessageCount(prev => prev + 1);
@@ -121,18 +136,7 @@ export default function Home() {
 
       const aiMessage: Message = { role: 'model', content: result.response };
       const finalMessages = [...updatedMessages, aiMessage];
-      updateConversation(currentConversationId!, { messages: finalMessages });
-
-      const currentConversation = conversations.find(c => c.id === currentConversationId);
-      if (currentConversation && finalMessages.length === 2 && currentConversation.title.startsWith('New Chat')) {
-        const conversationText = finalMessages.map(m => `${m.role}: ${m.content}`).join('\n');
-        try {
-          const { summary } = await summarizeConversation({ conversation: conversationText });
-          updateConversation(currentConversationId!, { title: summary });
-        } catch (e) {
-            console.error("Failed to summarize conversation title: ", e);
-        }
-      }
+      updateConversation(convId, { messages: finalMessages });
 
     } catch (error) {
       console.error('Error calling chat AI:', error);
@@ -140,7 +144,7 @@ export default function Home() {
         role: 'model',
         content: 'Sorry, I encountered an error. Please try again.',
       };
-      updateConversation(currentConversationId!, { messages: [...updatedMessages, errorMessage] });
+      updateConversation(convId, { messages: [...updatedMessages, errorMessage] });
     } finally {
       setIsLoading(false);
     }
@@ -244,6 +248,7 @@ export default function Home() {
     };
     setConversations(prev => [newConversation, ...prev]);
     setCurrentConversationId(newId);
+    return newId;
   }
 
   return (
@@ -251,37 +256,37 @@ export default function Home() {
       <AuthModal open={isAuthModalOpen} onOpenChange={setIsAuthModalOpen} />
       <div className="flex h-dvh bg-background text-foreground">
         <Sidebar>
-          <SidebarHeader className="p-2">
-            <div className="flex items-center justify-between">
-              <h2 className="text-lg font-semibold">Conversations</h2>
-            </div>
-            <Button variant="outline" className="w-full" onClick={startNewChat}>
-              <Plus className="mr-2" />
-              New Chat
-            </Button>
-          </SidebarHeader>
-          <ScrollArea className="flex-1">
-            <SidebarContent className="p-2">
-              <SidebarMenu>
-                {conversations.map((conv) => (
-                  <SidebarMenuItem key={conv.id}>
-                    <SidebarMenuButton
-                      onClick={() => setCurrentConversationId(conv.id)}
-                      isActive={currentConversationId === conv.id}
-                      className="w-full justify-start"
-                    >
-                      <MessageSquare />
-                      <span>{conv.title}</span>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </SidebarContent>
-          </ScrollArea>
+            <SidebarHeader className="p-2">
+                <div className="flex items-center justify-between">
+                    <h2 className="text-lg font-semibold">Conversations</h2>
+                </div>
+                <Button variant="outline" className="w-full" onClick={startNewChat}>
+                    <Plus className="mr-2" />
+                    New Chat
+                </Button>
+            </SidebarHeader>
+            <ScrollArea className="flex-1">
+                <SidebarContent className="p-2">
+                    <SidebarMenu>
+                        {conversations.map((conv) => (
+                            <SidebarMenuItem key={conv.id}>
+                                <SidebarMenuButton
+                                    onClick={() => setCurrentConversationId(conv.id)}
+                                    isActive={currentConversationId === conv.id}
+                                    className="w-full justify-start"
+                                >
+                                    <MessageSquare />
+                                    <span className="truncate">{conv.title}</span>
+                                </SidebarMenuButton>
+                            </SidebarMenuItem>
+                        ))}
+                    </SidebarMenu>
+                </SidebarContent>
+            </ScrollArea>
         </Sidebar>
 
         <main className="flex flex-1 flex-col">
-          <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-white/10 bg-background/50 px-4 shadow-sm backdrop-blur-sm">
+          <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center justify-between border-b border-white/10 bg-background/50 px-4 shadow-sm backdrop-blur-sm">
             <SidebarTrigger />
             <div className="flex flex-1 items-center justify-center gap-3 text-center font-headline text-2xl font-semibold sm:text-3xl">
               <div className="flex h-12 w-12 items-center justify-center rounded-full bg-transparent">
@@ -410,3 +415,5 @@ export default function Home() {
     </SidebarProvider>
   );
 }
+
+    
