@@ -1,3 +1,4 @@
+
 'use client';
 
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -63,10 +64,10 @@ export function ChatMessage({ message, isLoading = false }: ChatMessageProps) {
       )}
       <div
         className={cn(
-          'rounded-lg p-3 text-sm shadow-md',
+          'max-w-[90%] rounded-lg p-3 text-sm shadow-md sm:max-w-[80%]',
           isUser
             ? 'bg-primary text-primary-foreground'
-            : 'w-full bg-secondary text-secondary-foreground',
+            : 'bg-secondary text-secondary-foreground',
           isImage && 'p-0 overflow-hidden'
         )}
       >
