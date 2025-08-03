@@ -55,7 +55,7 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
     defaultValues: {
       email: '',
       password: '',
-      ...(isLoginView ? {} : { name: '' }),
+      name: '',
     },
   });
 
@@ -177,7 +177,7 @@ export function AuthModal({ open, onOpenChange }: AuthModalProps) {
             form.reset({
                 email: '',
                 password: '',
-                ...(isLoginView ? {} : { name: '' }),
+                name: '',
             });
           }}>
             {isLoginView ? 'Sign up' : 'Login'}
