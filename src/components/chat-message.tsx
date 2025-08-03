@@ -84,13 +84,6 @@ export function ChatMessage({ message, isLoading = false }: ChatMessageProps) {
           </article>
         )}
       </div>
-      {isUser && (
-        <Avatar className="h-8 w-8 border bg-background">
-          <AvatarFallback className="bg-transparent">
-            <User className="h-5 w-5 text-primary" />
-          </AvatarFallback>
-        </Avatar>
-      )}
     </motion.div>
   );
 }
