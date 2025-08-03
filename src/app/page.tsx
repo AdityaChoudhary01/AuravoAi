@@ -11,14 +11,23 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
-import { ImageIcon, LoaderCircle, Mic, SendHorizontal, X } from 'lucide-react';
+import { ImageIcon, LoaderCircle, MessageSquare, Mic, Plus, SendHorizontal, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
+import { summarizeConversation } from '@/ai/flows/summarize-conversation';
+import { Sidebar, SidebarContent, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 
 type Message = ChatMessageProps['message'];
 
+type Conversation = {
+  id: string;
+  title: string;
+  messages: Message[];
+};
+
 export default function Home() {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [currentConversationId, setCurrentConversationId] = useState<string | null>(null);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [initialPrompts, setInitialPrompts] = useState<string[]>([]);
@@ -28,6 +37,27 @@ export default function Home() {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const { toast } = useToast();
+
+  useEffect(() => {
+    const savedConversations = localStorage.getItem('chatHistory');
+    if (savedConversations) {
+      const parsedConversations = JSON.parse(savedConversations);
+      setConversations(parsedConversations);
+      if (parsedConversations.length > 0) {
+        setCurrentConversationId(parsedConversations[0].id);
+      } else {
+        startNewChat();
+      }
+    } else {
+      startNewChat();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (conversations.length > 0) {
+      localStorage.setItem('chatHistory', JSON.stringify(conversations));
+    }
+  }, [conversations]);
 
   useEffect(() => {
     async function fetchPrompts() {
@@ -43,7 +73,15 @@ export default function Home() {
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isLoading]);
+  }, [currentConversationId, isLoading]);
+
+  const currentMessages = conversations.find(c => c.id === currentConversationId)?.messages || [];
+
+  const updateConversation = (id: string, updates: Partial<Conversation>) => {
+    setConversations(prev =>
+      prev.map(c => (c.id === id ? { ...c, ...updates } : c))
+    );
+  };
 
   const handleSendMessage = async (prompt?: string) => {
     const userMessageContent = prompt || input;
@@ -51,28 +89,44 @@ export default function Home() {
 
     setIsLoading(true);
     const newUserMessage: Message = { role: 'user', content: userMessageContent };
-    const newMessages = [...messages, newUserMessage];
-    setMessages(newMessages);
+    
+    const updatedMessages = [...currentMessages, newUserMessage];
+    updateConversation(currentConversationId!, { messages: updatedMessages });
+
     if (!prompt) {
       setInput('');
     }
 
     try {
-      const history = newMessages
+      const history = updatedMessages
         .slice(0, -1)
         .map((m) => ({ role: m.role, content: m.content }));
       const chatInput: ChatInput = { history, prompt: userMessageContent };
       const result = await chat(chatInput);
 
       const aiMessage: Message = { role: 'model', content: result.response };
-      setMessages((prev) => [...prev, aiMessage]);
+      const finalMessages = [...updatedMessages, aiMessage];
+      updateConversation(currentConversationId!, { messages: finalMessages });
+
+      // Auto-summarize title
+      const currentConversation = conversations.find(c => c.id === currentConversationId);
+      if (currentConversation && finalMessages.length === 2 && currentConversation.title.startsWith('New Chat')) {
+        const conversationText = finalMessages.map(m => `${m.role}: ${m.content}`).join('\n');
+        try {
+          const { summary } = await summarizeConversation({ conversation: conversationText });
+          updateConversation(currentConversationId!, { title: summary });
+        } catch(e) {
+            console.error("Failed to summarize conversation title: ", e);
+        }
+      }
+
     } catch (error) {
       console.error('Error calling chat AI:', error);
       const errorMessage: Message = {
         role: 'model',
         content: 'Sorry, I encountered an error. Please try again.',
       };
-      setMessages((prev) => [...prev, errorMessage]);
+      updateConversation(currentConversationId!, { messages: [...updatedMessages, errorMessage] });
     } finally {
       setIsLoading(false);
     }
@@ -167,9 +221,45 @@ export default function Home() {
     handleSendMessage(`/imagine ${input.trim()}`);
   }
 
+  const startNewChat = () => {
+    const newId = `chat-${Date.now()}`;
+    const newConversation: Conversation = {
+      id: newId,
+      title: 'New Chat',
+      messages: [],
+    };
+    setConversations(prev => [newConversation, ...prev]);
+    setCurrentConversationId(newId);
+  }
 
   return (
+    <SidebarProvider>
     <div className="flex h-screen w-full flex-col bg-background">
+      <Sidebar>
+        <SidebarHeader>
+          <Button variant="outline" className="w-full" onClick={startNewChat}>
+            <Plus className="mr-2" />
+            New Chat
+          </Button>
+        </SidebarHeader>
+        <SidebarContent className="p-2">
+            <SidebarMenu>
+                {conversations.map((conv) => (
+                    <SidebarMenuItem key={conv.id}>
+                        <SidebarMenuButton 
+                            onClick={() => setCurrentConversationId(conv.id)} 
+                            isActive={currentConversationId === conv.id}
+                            className="w-full justify-start"
+                        >
+                            <MessageSquare />
+                            <span>{conv.title}</span>
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                ))}
+            </SidebarMenu>
+        </SidebarContent>
+      </Sidebar>
+      <SidebarInset className="flex flex-col">
       <motion.header 
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
@@ -177,8 +267,9 @@ export default function Home() {
         className="border-b border-white/10 p-4 shadow-sm"
       >
         <div className="mx-auto flex max-w-3xl items-center justify-center gap-3 text-center font-headline text-2xl font-semibold sm:text-3xl">
+          <SidebarTrigger className="md:hidden" />
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-transparent">
-            <GeminiIcon className="h-8 w-8" />
+            <GeminiIcon className="h-10 w-10" />
           </div>
           <h1 className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             Auravo AI
@@ -189,7 +280,7 @@ export default function Home() {
         <ScrollArea className="h-full flex-1">
           <div className="flex h-full flex-col justify-between p-4 md:p-6">
             <div className="mx-auto w-full max-w-3xl flex-1 space-y-6 pb-24">
-              {messages.length === 0 && !isLoading ? (
+              {currentMessages.length === 0 && !isLoading ? (
                 <div className="flex h-full flex-col items-center justify-center text-center">
                   <motion.div
                     initial={{ scale: 0, rotate: -45 }}
@@ -227,7 +318,7 @@ export default function Home() {
                   </div>
                 </div>
               ) : (
-                messages.map((msg, index) => (
+                currentMessages.map((msg, index) => (
                   <ChatMessage key={index} message={msg} />
                 ))
               )}
@@ -241,7 +332,7 @@ export default function Home() {
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
-        className="fixed bottom-0 left-0 right-0 z-10 bg-background/50 p-4 backdrop-blur-sm"
+        className="fixed bottom-0 left-0 right-0 z-10 bg-background/50 p-4 backdrop-blur-sm md:left-[calc(var(--sidebar-width-icon)*var(--sidebar-present,1))] peer-data-[variant=inset]:md:left-[calc(var(--sidebar-width-icon)*var(--sidebar-present,1)+1rem)]"
       >
         <div className="container mx-auto">
           <form
@@ -295,8 +386,8 @@ export default function Home() {
           </form>
         </div>
       </motion.div>
+      </SidebarInset>
     </div>
+    </SidebarProvider>
   );
 }
-
-    
