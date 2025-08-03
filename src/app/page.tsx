@@ -242,14 +242,14 @@ export default function Home() {
         <div className="container mx-auto">
           <form
             onSubmit={handleFormSubmit}
-            className="relative mx-auto flex w-full max-w-3xl items-end space-x-2 rounded-2xl border bg-secondary/50 p-2 shadow-lg transition-all focus-within:ring-2 focus-within:ring-primary"
+            className="relative mx-auto flex w-full max-w-3xl items-end space-x-2 rounded-2xl border bg-secondary/50 p-2 shadow-lg"
           >
              <Button
                 type="button"
                 size="icon"
                 variant="ghost"
                 onClick={handleMicClick}
-                className={cn("h-9 w-9 shrink-0 rounded-full", isRecording && "bg-red-500/20 text-red-500 hover:bg-red-500/30 hover:text-red-500")}
+                className={cn("h-9 w-9 shrink-0 rounded-full text-muted-foreground transition-colors hover:text-primary", isRecording && "bg-red-500/20 text-red-500 hover:bg-red-500/30 hover:text-red-500")}
                 aria-label={isRecording ? 'Stop recording' : 'Start recording'}
               >
                 {isRecording ? <X className="h-5 w-5" /> : <Mic className="h-5 w-5" />}
@@ -260,7 +260,7 @@ export default function Home() {
                 variant="ghost"
                 disabled={isLoading || !input.trim()}
                 onClick={handleImageGeneration}
-                className="h-9 w-9 shrink-0 rounded-full"
+                className="h-9 w-9 shrink-0 rounded-full text-muted-foreground transition-colors hover:text-primary disabled:opacity-50"
                 aria-label="Generate image"
               >
                 <ImageIcon className="h-5 w-5" />
@@ -269,7 +269,7 @@ export default function Home() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder={isRecording ? 'Recording...' : 'Type your message here...'}
-              className="flex-1 resize-none border-none bg-transparent shadow-none focus-visible:ring-0"
+              className="flex-1 resize-none border-none bg-transparent py-1.5 text-base shadow-none focus-visible:ring-0"
               onKeyDown={handleKeyDown}
               disabled={isLoading || isRecording}
               maxRows={5}
@@ -280,7 +280,7 @@ export default function Home() {
               size="icon"
               disabled={isLoading || !input.trim() || isRecording}
               aria-label="Send message"
-              className="h-9 w-9 shrink-0 rounded-full transition-transform hover:scale-110 active:scale-95"
+              className="h-9 w-9 shrink-0 rounded-full bg-primary text-primary-foreground transition-transform hover:scale-110 active:scale-95 disabled:bg-primary/50"
             >
               {isLoading && !isRecording ? (
                 <LoaderCircle className="h-5 w-5 animate-spin" />
