@@ -11,14 +11,14 @@ export const metadata: Metadata = {
   },
   description: 'Engage in intelligent conversations, generate images, and get instant answers with Auravo AI, a modern chat application powered by Google\'s Gemini models.',
   keywords: ['AI Chat', 'Intelligent Assistant', 'Gemini AI', 'Next.js', 'Auravo AI', 'Chatbot', 'Image Generation', 'AI assistant', 'Conversational AI'],
-  authors: [{ name: 'Aditya Choudhary', url: 'https://auravoai.vercel.app/' }],
+  authors: [{ name: 'Aditya Choudhary', url: 'https://auravoai.vercel.app' }],
   creator: 'Aditya Choudhary',
   publisher: 'Auravo AI',
-  metadataBase: new URL('https://auravoai.vercel.app/'),
+  metadataBase: new URL('https://auravoai.vercel.app'),
   openGraph: {
     title: 'Auravo AI - Your Intelligent Chat Assistant',
     description: 'Engage in intelligent conversations, generate images, and get instant answers with Auravo AI.',
-    url: 'https://auravoai.vercel.app/',
+    url: 'https://auravoai.vercel.app',
     siteName: 'Auravo AI',
     images: [
         {
@@ -63,7 +63,7 @@ export default function RootLayout({
     '@context': 'https://schema.org',
     '@type': 'WebSite',
     'name': 'Auravo AI',
-    'url': 'https://auravoai.vercel.app/',
+    'url': 'https://auravoai.vercel.app',
     'potentialAction': {
       '@type': 'SearchAction',
       'target': 'https://auravoai.vercel.app/search?q={search_term_string}',
