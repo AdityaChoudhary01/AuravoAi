@@ -2,6 +2,8 @@
 
 This is a starter project demonstrating how to integrate the GenKit AI SDK with a Next.js application to build a simple chat interface.
 
+## LiveDemo
+https://auravoai.vercel.app/
 ## Description
 
 This project provides a basic chat application powered by AI models integrated through GenKit. Users can interact with an AI chatbot, and the project showcases the setup and usage of GenKit within a Next.js framework, including flow definitions, component integration, and UI elements.
