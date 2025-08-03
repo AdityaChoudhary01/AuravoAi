@@ -18,34 +18,19 @@ export type GenerateInitialPromptsOutput = z.infer<
   typeof GenerateInitialPromptsOutputSchema
 >;
 
+// Hardcoded prompts to avoid unnecessary API calls and rate limiting.
+const initialPrompts: GenerateInitialPromptsOutput = [
+  "Explain quantum computing in simple terms.",
+  "Write a short story about a robot who discovers music.",
+  "What are some healthy and delicious breakfast ideas?",
+  "Create a workout plan for building muscle at home.",
+  "Summarize the plot of the movie 'Inception'.",
+  "Translate 'Where is the nearest library?' to French.",
+  "Write a python script to sort a list of numbers.",
+  "Give me some tips for learning a new language.",
+];
+
+
 export async function generateInitialPrompts(): Promise<GenerateInitialPromptsOutput> {
-  return generateInitialPromptsFlow();
+  return initialPrompts;
 }
-
-const prompt = ai.definePrompt({
-  name: 'generateInitialPromptsPrompt',
-  output: {schema: GenerateInitialPromptsOutputSchema},
-  prompt: `You are an AI assistant designed to help new users understand how to interact with a language model.
-
-  Generate a list of diverse example prompts that showcase the capabilities of the language model. The prompts should be clear, concise, and engaging, encouraging users to explore different functionalities and use cases.
-
-  Return the prompts as a JSON array of strings.
-
-  Example:
-  [
-    "Summarize the plot of Hamlet.",
-    "Write a poem about the ocean.",
-    "Translate 'Hello, world!' into Spanish.",
-    "What are the benefits of meditation?",
-    "Compose an email to my boss requesting a raise."
-  ]
-  `,
-});
-
-const generateInitialPromptsFlow = ai.defineFlow({
-  name: 'generateInitialPromptsFlow',
-  outputSchema: GenerateInitialPromptsOutputSchema,
-}, async () => {
-  const {output} = await prompt({});
-  return output!;
-});
