@@ -11,7 +11,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 import { motion } from 'framer-motion';
-import { ImageIcon, LoaderCircle, MessageSquare, Mic, Plus, SendHorizontal, X } from 'lucide-react';
+import { ImageIcon, LoaderCircle, Menu, MessageSquare, Mic, Plus, SendHorizontal, X } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { summarizeConversation } from '@/ai/flows/summarize-conversation';
@@ -264,10 +264,12 @@ export default function Home() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.5, ease: 'easeOut' }}
-        className="border-b border-white/10 p-4 shadow-sm"
+        className="relative border-b border-white/10 p-4 shadow-sm"
       >
+        <SidebarTrigger className="absolute left-4 top-1/2 -translate-y-1/2 md:hidden">
+            <Menu />
+        </SidebarTrigger>
         <div className="mx-auto flex max-w-3xl items-center justify-center gap-3 text-center font-headline text-2xl font-semibold sm:text-3xl">
-          <SidebarTrigger className="md:hidden" />
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-transparent">
             <GeminiIcon className="h-10 w-10" />
           </div>
