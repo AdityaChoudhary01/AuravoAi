@@ -15,7 +15,6 @@ import { useEffect, useRef, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { summarizeConversation } from '@/ai/flows/summarize-conversation';
 import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
-import { SheetClose } from '@/components/ui/sheet';
 
 type Message = ChatMessageProps['message'];
 
@@ -108,7 +107,6 @@ export default function Home() {
       const finalMessages = [...updatedMessages, aiMessage];
       updateConversation(currentConversationId!, { messages: finalMessages });
 
-      // Auto-summarize title
       const currentConversation = conversations.find(c => c.id === currentConversationId);
       if (currentConversation && finalMessages.length === 2 && currentConversation.title.startsWith('New Chat')) {
         const conversationText = finalMessages.map(m => `${m.role}: ${m.content}`).join('\n');
@@ -234,8 +232,8 @@ export default function Home() {
 
   return (
     <SidebarProvider>
-      <div className="flex h-dvh bg-background">
-        <Sidebar collapsible="offcanvas">
+      <div className="flex h-dvh bg-background text-foreground">
+        <Sidebar>
           <SidebarHeader>
             <div className="flex items-center justify-between">
               <h2 className="text-lg font-semibold">Conversations</h2>
@@ -263,22 +261,18 @@ export default function Home() {
           </SidebarContent>
         </Sidebar>
 
-        <div className="flex h-dvh flex-1 flex-col">
-           <header className="sticky top-0 z-10 border-b border-white/10 bg-background/50 p-4 shadow-sm backdrop-blur-sm">
-            <div className="mx-auto flex w-full items-center justify-between gap-3">
-              <SidebarTrigger>
-                <Menu />
-              </SidebarTrigger>
-              <div className="flex flex-1 items-center justify-center gap-3 text-center font-headline text-2xl font-semibold sm:text-3xl">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-transparent">
-                  <GeminiIcon className="h-10 w-10" />
-                </div>
-                <h1 className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-                  Auravo AI
-                </h1>
+        <div className="flex flex-1 flex-col">
+          <header className="sticky top-0 z-10 flex h-16 items-center justify-between border-b border-white/10 bg-background/50 px-4 shadow-sm backdrop-blur-sm">
+            <SidebarTrigger />
+            <div className="flex flex-1 items-center justify-center gap-3 text-center font-headline text-2xl font-semibold sm:text-3xl">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-transparent">
+                <GeminiIcon className="h-10 w-10" />
               </div>
-              <div className="w-8"></div>
+              <h1 className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+                Auravo AI
+              </h1>
             </div>
+            <div className="w-8"></div>
           </header>
 
           <main className="flex-1 overflow-y-auto">
@@ -393,3 +387,5 @@ export default function Home() {
     </SidebarProvider>
   );
 }
+
+    
