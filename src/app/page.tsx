@@ -135,7 +135,7 @@ export default function Home() {
       const chatInput: ChatInput = { history, prompt: userMessageContent };
       const result = await chat(chatInput);
 
-      const aiMessage: Message = { role: 'model', content: result.response, isStreaming: true };
+      const aiMessage: Message = { role: 'model', content: result.response };
       const finalMessages = [...updatedMessages, aiMessage];
       updateConversation(convId, { messages: finalMessages });
 
@@ -350,8 +350,8 @@ export default function Home() {
               )}
               {isLoading && <ChatMessage isLoading />}
               <div ref={messagesEndRef} />
+              <Footer />
             </div>
-            <Footer />
           </div>
 
           <motion.div
@@ -417,5 +417,3 @@ export default function Home() {
     </SidebarProvider>
   );
 }
-
-    
