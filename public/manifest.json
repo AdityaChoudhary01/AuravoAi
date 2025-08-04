@@ -5,8 +5,8 @@
   "description": "An intelligent chat assistant powered by Gemini.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#F0E5F5",
-  "theme_color": "#A020F0",
+  "background_color": "#09011E",
+  "theme_color": "#09011E",
   "icons": [
     {
       "src": "/favicon.svg",
