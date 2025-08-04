@@ -17,7 +17,7 @@ export default function AboutPage() {
         </div>
       </header>
 
-      <main className="flex-1">
+      <main className="flex-1 px-4">
         <div className="container mx-auto max-w-4xl py-12 md:py-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
