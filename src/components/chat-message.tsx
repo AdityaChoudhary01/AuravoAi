@@ -8,11 +8,13 @@ import { LoaderCircle } from 'lucide-react';
 import Markdown from 'react-markdown';
 import Image from 'next/image';
 import { GeminiIcon } from './gemini-icon';
+import { useTypewriter } from '@/hooks/use-typewriter';
 
 export type ChatMessageProps = {
-  message: {
+  message?: {
     role: 'user' | 'model';
     content: string;
+    isStreaming?: boolean;
   };
   isLoading?: boolean;
 };
@@ -23,7 +25,7 @@ export function ChatMessage({ message, isLoading = false }: ChatMessageProps) {
     visible: { opacity: 1, y: 0, transition: { duration: 0.3 } },
   };
 
-  if (isLoading) {
+  if (isLoading || !message) {
     return (
       <motion.div
         variants={messageVariants}
@@ -43,6 +45,7 @@ export function ChatMessage({ message, isLoading = false }: ChatMessageProps) {
     );
   }
 
+  const displayedText = useTypewriter(message.content, message.isStreaming);
   const isUser = message.role === 'user';
   const isImage = message.content.startsWith('data:image');
 
@@ -82,7 +85,7 @@ export function ChatMessage({ message, isLoading = false }: ChatMessageProps) {
           />
         ) : (
           <article className="prose prose-invert max-w-none">
-            <Markdown>{message.content}</Markdown>
+            <Markdown>{displayedText}</Markdown>
           </article>
         )}
       </div>
